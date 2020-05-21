@@ -1,7 +1,7 @@
 Ansible Vault Integration
 ===
 [![GitHub Release](https://img.shields.io/github/v/tag/timo-reymann/idea-ansible-vault-integration.svg?label=version)](https://github.com/timo-reymann/idea-ansible-vault-integration/releases)
-[![JetBrains Plugins](https://img.shields.io/badge/JetBrains-Plugins-orange)](https://plugins.jetbrains.com/plugin/COMING-SOON)
+[![JetBrains Plugins](https://img.shields.io/badge/JetBrains-Plugins-orange)](https://plugins.jetbrains.com/plugin/14353-ansible-vault-integration)
 
 Integrate the ansible vault directly into IntelliJ IDEA with context actions for vaulting and unvaulting secrets.
 This makes working with ansible-vault a breeze!
