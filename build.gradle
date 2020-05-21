@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id "org.jetbrains.intellij" version "0.4.9"
+    id 'com.palantir.git-version' version '0.12.2'
+}
+
+version gitVersion()
+
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'idea'
+apply plugin: "java"
+
+def changelog = file("changelog.html").text
+def details = versionDetails()
+def pluginVersion = details.lastTag
+
+println("Building plugin version: " + pluginVersion)
+
+java {
+    sourceCompatibility =  JavaVersion.VERSION_1_8
+    targetCompatibility =  JavaVersion.VERSION_1_8
+}
+
+intellij {
+    version = ideaVersion
+    type = ideaType
+    pluginName = "Ansible Vault Integration"
+    updateSinceUntilBuild = false
+    downloadSources = true
+    plugins = ["yaml"]
+}
+
+patchPluginXml {
+    version = pluginVersion
+    changeNotes = changelog
+}
+
+publishPlugin {
+    token = System.getenv("JB_TOKEN")
+}

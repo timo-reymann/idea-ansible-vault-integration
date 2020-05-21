@@ -1,0 +1,37 @@
+<idea-plugin url="https://github.com/timo-reymann/idea-ansible-vault-integration">
+    <id>com.github.timo_reymann.ansible_vault_integration</id>
+    <name>Ansible Vault Integration</name>
+    <version>XXX</version>
+    <vendor email="mail@timo-reymann.de" url="https://timo-reymann.de/">Timo Reymann</vendor>
+<category>
+
+</category>
+    <description><![CDATA[
+     Integrate the ansible vault directly into IntelliJ IDEA with context actions for vaulting and unvaulting secrets.
+     This makes working with ansible-vault a breeze!
+    ]]></description>
+
+    <change-notes><![CDATA[Will be set by gradle build, so this is just a placeholder to satisfy the constraints]]></change-notes>
+
+    <!-- Dependencies -->
+    <idea-version since-build="192" />
+    <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Quick Actions -->
+        <intentionAction>
+            <className>com.github.timo_reymann.ansible_vault_integration.action.UnvaultAction</className>
+            <category>Ansible</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.github.timo_reymann.ansible_vault_integration.action.VaultAction</className>
+            <category>Ansible</category>
+        </intentionAction>
+        <!-- Configuration -->
+        <projectConfigurable id="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"
+                                 groupId="tools"
+                                 instance="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsConfigurable"/>
+        <projectService serviceImplementation="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"/>
+    </extensions>
+</idea-plugin>
