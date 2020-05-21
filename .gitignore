@@ -14,3 +14,4 @@ gradle-app.setting
 .idea/*.xml
 .idea/modules/*
 !.idea/runConfigurations/
+.idea/runConfigurations/publish.xml
