@@ -3,7 +3,6 @@ package com.github.timo_reymann.ansible_vault_integration.execution;
 import com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings;
 import com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsState;
 import com.github.timo_reymann.ansible_vault_integration.util.AnsibleVaultedStringUtil;
-import com.google.common.collect.Lists;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
@@ -77,6 +76,7 @@ public class AnsibleVaultWrapper {
         try {
             processHandler = new OSProcessHandler(new GeneralCommandLine(vaultExecutable)
                     .withParameters(effectiveArgs)
+                    .withWorkDirectory(project.getBasePath())
             );
 
             // output

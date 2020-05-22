@@ -83,7 +83,6 @@ public class UnvaultAction extends PsiElementBaseIntentionAction implements Inte
             @Override
             public void run() throws Exception {
                 String decrypted = AnsibleVaultWrapper.decrypt(project, raw);
-
                 ClipboardSynchronizer.getInstance().setContent(new TextTransferable(decrypted, decrypted), CopyPasteManagerEx.getInstanceEx());
             }
 
