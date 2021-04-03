@@ -27,8 +27,7 @@ java {
 }
 
 intellij {
-    version = ideaVersion
-    type = ideaType
+    version =  "IU-LATEST-EAP-SNAPSHOT"
     pluginName = "Ansible Vault Integration"
     updateSinceUntilBuild = false
     downloadSources = true
