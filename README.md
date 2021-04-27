@@ -2,6 +2,7 @@ Ansible Vault Integration
 ===
 [![GitHub Release](https://img.shields.io/github/v/tag/timo-reymann/idea-ansible-vault-integration.svg?label=version)](https://github.com/timo-reymann/idea-ansible-vault-integration/releases)
 [![JetBrains Plugins](https://img.shields.io/badge/JetBrains-Plugins-orange)](https://plugins.jetbrains.com/plugin/14353-ansible-vault-integration)
+[![CircleCI](https://circleci.com/gh/timo-reymann/idea-ansible-vault-integration.svg?style=shield)](https://app.circleci.com/pipelines/github/timo-reymann/idea-ansible-vault-integration)
 
 Integrate the ansible vault directly into IntelliJ IDEA with context actions for vaulting and unvaulting secrets. This
 makes working with ansible-vault a breeze!
@@ -22,9 +23,11 @@ are done!
 Got a custom vault file for your project? - I got you covered with custom command line arguments!
 
 #### Examples
+
 Navigate to `Settings | Tools | Ansible Vault`
 
 ##### Configure secret file in current project
+
 Use following cli args:
 
 ```
@@ -32,6 +35,7 @@ Use following cli args:
 ```
 
 ##### Configure secret file in home directory
+
 Use following cli args:
 
 ```
@@ -42,7 +46,7 @@ Use following cli args:
 
 Ansible is great, but the ansible-vault is a piece of junk to use for passwords to encrypt and decrypt.
 
-## How can i use it?
+## How can I use it?
 
 1. Install it from the plugin repository
 2. Restart your IDE

@@ -1,0 +1,109 @@
+version: '2.1'
+executors:
+  gradle:
+    docker:
+      - image: circleci/openjdk:11.0.3-jdk-stretch
+  go:
+    docker:
+      - image: circleci/golang:1.15
+
+commands:
+  retrieve_cache:
+    steps:
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+  create_or_update_cache:
+    steps:
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+
+jobs:
+  build:
+    executor: gradle
+    steps:
+      - checkout
+      - retrieve_cache
+      - run:
+          name: Build plugin
+          command: ./gradlew buildPlugin
+      - store_artifacts:
+          path: build/distributions
+      - persist_to_workspace:
+          name: Persist plugin file
+          root: .
+          paths:
+            - build/distributions
+      - create_or_update_cache
+
+  publish_to_marketplace:
+    executor: gradle
+    steps:
+      - checkout
+      - retrieve_cache
+      - attach_workspace:
+          at: .
+          name: Retrieve plugin file
+      - run:
+          name: Publish plugin
+          command: ./gradlew publishPlugin
+
+  github_release:
+    executor: go
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+          name: Retrieve plugin file
+      - run:
+          name: Create github release
+          command: |
+            go get github.com/github-release/github-release
+            git config user.name $CIRCLE_PROJECT_USERNAME
+            github-release release \
+                --user $CIRCLE_PROJECT_USERNAME \
+                --repo $CIRCLE_PROJECT_REPONAME \
+                --tag $CIRCLE_TAG \
+                --name "Release $CIRCLE_TAG"
+            for filename in build/distributions/*
+            do
+                github-release upload \
+                  --replace \
+                  --user $CIRCLE_PROJECT_USERNAME \
+                  --repo $CIRCLE_PROJECT_REPONAME \
+                  --tag $CIRCLE_TAG \
+                  --name "$(basename "$filename")" \
+                  --file "$filename"
+            done
+workflows:
+  continious:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - github_release:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
+      - publish_to_marketplace:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
