@@ -14,9 +14,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.io.FileUtil;
 
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,22 +29,26 @@ import java.util.concurrent.atomic.AtomicLong;
  * Wrapper for ansible-vault command
  */
 public class AnsibleVaultWrapper {
-    public static String decrypt(Project project, String vaulted) throws Exception {
-        return performAction(project, "decrypt", AnsibleVaultedStringUtil.removePrefix(vaulted));
+    private static final String ENVIRONMENT_PREFIX = "IDEA_ANSIBLE_VAULT_";
+    private static final String ENVIRONMENT_CONTEXT_FILE = ENVIRONMENT_PREFIX + "CONTEXT_FILE";
+    private static final String ENVIRONMENT_CONTEXT_DIRECTORY = ENVIRONMENT_PREFIX + "CONTEXT_DIRECTORY";
+
+    public static String decrypt(Project project, PsiFile contextFile, String vaulted) throws Exception {
+        return performAction(project, "decrypt", AnsibleVaultedStringUtil.removePrefix(vaulted), contextFile);
     }
 
-    public static String encrypt(Project project, String raw) throws Exception {
-        return AnsibleVaultedStringUtil.addPrefix(performAction(project,"encrypt", raw));
+    public static String encrypt(Project project, PsiFile contextFile, String raw) throws Exception {
+        return AnsibleVaultedStringUtil.addPrefix(performAction(project, "encrypt", raw, contextFile));
     }
 
-    public static String performAction(Project project, String action, String input) throws Exception {
+    public static String performAction(Project project, String action, String input, PsiFile contextFile) throws Exception {
         File tempFile = FileUtil.createTempFile("vault", "tmp");
         FileUtil.writeToFile(tempFile, input);
 
         Exception exception = null;
         List<String> stdout = null;
         try {
-            stdout = execute(project, Arrays.asList(action, tempFile.getAbsolutePath(), "--output=-"));
+            stdout = execute(project, contextFile, Arrays.asList(action, tempFile.getAbsolutePath(), "--output=-"));
         } catch (Exception e) {
             exception = e;
         } finally {
@@ -57,7 +64,7 @@ public class AnsibleVaultWrapper {
         return String.join("\n", stdout);
     }
 
-    protected static List<String> execute(Project project, List<String> parameters) throws
+    protected static List<String> execute(Project project, PsiFile contextFile, List<String> parameters) throws
             AnsibleVaultWrapperCallFailedException {
         AnsibleVaultSettingsState state = AnsibleVaultSettings.getInstance(project).getState();
         String vaultExecutable = state.vaultExecutable()
@@ -74,9 +81,12 @@ public class AnsibleVaultWrapper {
         List<String> stdout = new ArrayList<>();
         AtomicLong line = new AtomicLong(0);
         try {
+            Path contextPath = contextFile.getVirtualFile().toNioPath();
             processHandler = new OSProcessHandler(new GeneralCommandLine(vaultExecutable)
                     .withParameters(effectiveArgs)
                     .withWorkDirectory(project.getBasePath())
+                    .withEnvironment(ENVIRONMENT_CONTEXT_FILE, contextPath.toString())
+                    .withEnvironment(ENVIRONMENT_CONTEXT_DIRECTORY, contextPath.toFile().getParentFile().getName())
             );
 
             // output

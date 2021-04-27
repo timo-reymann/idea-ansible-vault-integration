@@ -12,6 +12,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ui.TextTransferable;
@@ -23,7 +24,6 @@ import static org.jetbrains.yaml.YAMLTokenTypes.*;
 
 /**
  * Unvault Action to provide unvault for yaml files
- *
  */
 public class UnvaultAction extends PsiElementBaseIntentionAction implements IntentionAction {
 
@@ -67,7 +67,7 @@ public class UnvaultAction extends PsiElementBaseIntentionAction implements Inte
         }
 
         // is in tag for vault string potentially
-        if (SCALAR_KEY.equals(elementType) && element.getNextSibling() != null &&  element.getNextSibling().getNextSibling() != null) {
+        if (SCALAR_KEY.equals(elementType) && element.getNextSibling() != null && element.getNextSibling().getNextSibling() != null) {
             // <tag>:<space><text>
             return element.getNextSibling().getNextSibling().getNextSibling().getNode().getText();
         }
@@ -78,11 +78,11 @@ public class UnvaultAction extends PsiElementBaseIntentionAction implements Inte
     @Override
     public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
         String raw = extractText(element);
-
+        final PsiFile containingFile = element.getContainingFile();
         AnsibleVaultTask task = new AnsibleVaultTask(project, "Decrypt Secret", new AnsibleVaultRunnable() {
             @Override
             public void run() throws Exception {
-                String decrypted = AnsibleVaultWrapper.decrypt(project, raw);
+                String decrypted = AnsibleVaultWrapper.decrypt(project, containingFile, raw);
                 ClipboardSynchronizer.getInstance().setContent(new TextTransferable(decrypted, decrypted), CopyPasteManagerEx.getInstanceEx());
             }
 

@@ -22,6 +22,15 @@ are done!
 
 Got a custom vault file for your project? - I got you covered with custom command line arguments!
 
+### Provided environment variables
+
+In case you are using a script to provide your vault secret, the plugin provides the following environment variables:
+
+| Environment variable                  | Content                                                               |
+| :------------------------------------ | :-------------------------------------------------------------------- |
+| IDEA_ANSIBLE_VAULT_CONTEXT_FILE       | Absolute path to the file the vault/unvault action was triggered in   |
+| IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY  | Name of the directory the action was triggered in, **NO** path        |
+
 #### Examples
 
 Navigate to `Settings | Tools | Ansible Vault`
@@ -40,6 +49,64 @@ Use following cli args:
 
 ```
 --vault-password-file ~/.ansible-secret
+```
+
+##### Configure secret based on maturity
+
+Let's say you have an ansible setup with three stages (dev, qa, prod), with the following directory structure:
+
+```
+group-vars/
+    all/vars.yml
+    dev/vars.yml
+    qa/vars.yml
+    prod/vars.yml
+```
+
+For each maturity you have a different vault file following this pattern: `.${maturity}.secret`, you can use the following
+configuration:
+
+Cli args:
+```
+--vault-password-file .idea-get-vault-password.sh
+```
+
+Create the file `.idea-get-vault-password.sh` (0700):
+
+```bash
+#!/bin/bash
+
+# Helper to show error message
+__error_message() {
+   >&2 echo "$1"
+   exit 2
+}
+
+# Check script is not called directly
+if [ -z "$IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY" ]
+then
+  __error_message "Call is not coming from IntelliJ Plugin"
+fi
+
+# Check context folder
+case "$IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY" in
+  # known maturities
+  dev|qa|prod)
+    secret_file=".${IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY}.secret"
+    if [ -f "$secret_file" ]
+    then
+      cat  ".${IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY}.secret"
+    else
+      __error_message "Secret file '${secret_file}' not found"
+    fi
+    ;;
+
+  # whoops something went wrong
+  *)
+    __error_message "Unsupported folder"
+    exit 2
+    ;;
+esac
 ```
 
 ## Why?

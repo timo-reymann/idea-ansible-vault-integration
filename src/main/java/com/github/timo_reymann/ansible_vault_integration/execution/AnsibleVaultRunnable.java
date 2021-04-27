@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Abstraction for ansible vault task
- *
  */
 public interface AnsibleVaultRunnable {
     /***

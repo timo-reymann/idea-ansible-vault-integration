@@ -10,6 +10,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.Nls;
@@ -22,7 +23,6 @@ import static org.jetbrains.yaml.YAMLTokenTypes.*;
 
 /**
  * Vault Action to provide unvault for yaml files
- *
  */
 public class VaultAction extends PsiElementBaseIntentionAction implements IntentionAction {
 
@@ -68,12 +68,19 @@ public class VaultAction extends PsiElementBaseIntentionAction implements Intent
     @Override
     public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
         String content = extractValue(element);
+        final PsiFile containingFile = element.getContainingFile();
         AnsibleVaultTask task = new AnsibleVaultTask(project, "Decrypt Secret", new AnsibleVaultRunnable() {
             @Override
             public void run() throws Exception {
-                String encrypted = AnsibleVaultWrapper.encrypt(project, content);
+                String encrypted = AnsibleVaultWrapper.encrypt(project, containingFile, content);
                 WriteCommandAction.runWriteCommandAction(project, () -> {
                     YAMLValue generatedReplacement = new YAMLElementGenerator(project).createYamlKeyValue(element.getParent().getText(), encrypted).getValue();
+
+                    // Just in case
+                    if (element.getContext() == null || generatedReplacement == null) {
+                        return;
+                    }
+
                     element.getContext().replace(generatedReplacement);
                 });
             }
