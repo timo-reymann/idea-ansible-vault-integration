@@ -15,7 +15,6 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'idea'
 apply plugin: "java"
 
-def changelog = file("changelog.html").text
 def details = versionDetails()
 def pluginVersion = details.lastTag
 
@@ -36,7 +35,6 @@ intellij {
 
 patchPluginXml {
     version = pluginVersion
-    changeNotes = changelog
 }
 
 publishPlugin {

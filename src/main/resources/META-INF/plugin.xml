@@ -3,18 +3,41 @@
     <name>Ansible Vault Integration</name>
     <version>XXX</version>
     <vendor email="mail@timo-reymann.de" url="https://timo-reymann.de/">Timo Reymann</vendor>
-<category>
+    <category>
 
-</category>
+    </category>
     <description><![CDATA[
-     Integrate the ansible vault directly into IntelliJ IDEA with context actions for vaulting and unvaulting secrets.
-     This makes working with ansible-vault a breeze!
-    ]]></description>
+        Integrate the ansible vault directly into IntelliJ IDEA with context actions for vaulting and unvaulting secrets.
+        This makes working with ansible-vault a breeze!
+        ]]></description>
 
-    <change-notes><![CDATA[Will be set by gradle build, so this is just a placeholder to satisfy the constraints]]></change-notes>
+    <change-notes><![CDATA[
+        <ul>
+            <li>1.2.0
+                <ul>
+                    <li>Add environment variables to allow custom scripts</li>
+                </ul>
+            </li>
+            <li>1.1.0
+                <ul>
+                    <li>Add plugin icon</li>
+                </ul>
+            </li>
+            <li>1.0.0
+                <ul>
+                    <li>Make ansible-vault execution realtive to project root</li>
+                </ul>
+            </li>
+            <li>0.0.1
+                <ul>
+                    <li>Initial plugin creation. This is where it all starts.</li>
+                </ul>
+            </li>
+        </ul>
+        ]]></change-notes>
 
     <!-- Dependencies -->
-    <idea-version since-build="192" />
+    <idea-version since-build="192"/>
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends>com.intellij.modules.platform</depends>
 
@@ -30,8 +53,9 @@
         </intentionAction>
         <!-- Configuration -->
         <projectConfigurable id="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"
-                                 groupId="tools"
-                                 instance="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsConfigurable"/>
-        <projectService serviceImplementation="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"/>
+                             groupId="tools"
+                             instance="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsConfigurable"/>
+        <projectService
+                serviceImplementation="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"/>
     </extensions>
 </idea-plugin>
