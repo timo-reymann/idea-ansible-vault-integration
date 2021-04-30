@@ -2,7 +2,7 @@
     <id>com.github.timo_reymann.ansible_vault_integration</id>
     <name>Ansible Vault Integration</name>
     <version>XXX</version>
-    <vendor email="mail@timo-reymann.de" url="https://timo-reymann.de/">Timo Reymann</vendor>
+    <vendor email="jetbrains-plugins@timo-reymann.de" url="https://timo-reymann.de/">Timo Reymann</vendor>
     <category>
 
     </category>
