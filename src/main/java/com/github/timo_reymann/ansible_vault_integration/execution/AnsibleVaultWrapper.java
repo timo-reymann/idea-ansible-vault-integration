@@ -10,12 +10,14 @@ import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.io.FileUtil;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import jdk.internal.jline.internal.Ansi;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -29,6 +31,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Wrapper for ansible-vault command
  */
 public class AnsibleVaultWrapper {
+    private static Logger log = Logger.getInstance(AnsibleVaultWrapper.class);
     private static final String ENVIRONMENT_PREFIX = "IDEA_ANSIBLE_VAULT_";
     private static final String ENVIRONMENT_CONTEXT_FILE = ENVIRONMENT_PREFIX + "CONTEXT_FILE";
     private static final String ENVIRONMENT_CONTEXT_DIRECTORY = ENVIRONMENT_PREFIX + "CONTEXT_DIRECTORY";
@@ -53,7 +56,7 @@ public class AnsibleVaultWrapper {
             exception = e;
         } finally {
             if (!tempFile.delete()) {
-                PluginManager.getLogger().warn("Could not delete file " + tempFile.getAbsolutePath());
+                log.warn("Could not delete file " + tempFile.getAbsolutePath());
             }
         }
 
