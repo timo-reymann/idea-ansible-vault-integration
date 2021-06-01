@@ -20,8 +20,13 @@ public class WslAnsibleCommandLineTransformer implements AnsibleCommandLineTrans
 
     @Override
     public GeneralCommandLine transformCommandLine(Project project, GeneralCommandLine commandLine) {
+        WSLCommandLineOptions wslCommandLineOptions = new WSLCommandLineOptions()
+                .setExecuteCommandInShell(false)
+                .setRemoteWorkingDirectory(transformFileName(project.getBasePath()));
+
         try {
-            return distribution.patchCommandLine(commandLine, project, new WSLCommandLineOptions().setExecuteCommandInShell(false));
+            return distribution
+                    .patchCommandLine(commandLine, project, wslCommandLineOptions);
         } catch (ExecutionException e) {
             return null;
         }

@@ -142,6 +142,7 @@ public abstract class AnsibleVaultAction {
                 .withEnv(ENVIRONMENT_CONTEXT_DIRECTORY, contextPath.toFile().getParentFile().getName())
                 .withFilePathEnv(ENVIRONMENT_CONTEXT_FILE, contextPath.toString())
                 .getCommandLine(project)
+                .withWorkDirectory(project.getBasePath())
                 .withParameters(parameters)
                 .withParameters(vaultArguments);
     }
