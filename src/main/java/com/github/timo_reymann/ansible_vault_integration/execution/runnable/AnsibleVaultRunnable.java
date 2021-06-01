@@ -1,4 +1,4 @@
-package com.github.timo_reymann.ansible_vault_integration.execution;
+package com.github.timo_reymann.ansible_vault_integration.execution.runnable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ public interface AnsibleVaultRunnable {
      * Execute task using ansible vault
      * @throws Exception Exceptions during execution
      */
-    public void run() throws Exception;
+    void run() throws Exception;
 
     /**
      * Get message for success
@@ -18,5 +18,5 @@ public interface AnsibleVaultRunnable {
      * @return String
      */
     @NotNull
-    public String getSuccessMessage();
+    String getSuccessMessage();
 }
