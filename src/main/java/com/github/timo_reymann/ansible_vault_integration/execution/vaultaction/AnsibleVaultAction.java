@@ -127,7 +127,6 @@ public abstract class AnsibleVaultAction {
         boolean isWsl = runsInWsl(vaultExecutable);
 
         AnsibleCommandLineTransformer ansibleCommandLineTransformer = null;
-        WSLDistribution wslDistribution = null;
         if (isWsl) {
             ansibleCommandLineTransformer = new WslAnsibleCommandLineTransformer(
                     WslPath.parseWindowsUncPath(vaultExecutable).getDistribution()
