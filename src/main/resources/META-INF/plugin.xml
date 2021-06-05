@@ -13,6 +13,11 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>1.3.0
+                <ul>
+                    <li>Add WSL support</li>
+                </ul>
+            </li>
             <li>1.2.0
                 <ul>
                     <li>Add environment variables to allow custom scripts</li>

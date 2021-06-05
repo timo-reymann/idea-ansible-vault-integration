@@ -1,5 +1,6 @@
 package com.github.timo_reymann.ansible_vault_integration.execution;
 
+import com.github.timo_reymann.ansible_vault_integration.execution.runnable.AnsibleVaultRunnable;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -30,8 +31,8 @@ public class AnsibleVaultTask extends Task.Backgroundable {
     @Override
     public void run(@NotNull ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
-        indicator.setText(this.myTitle);
-        Notification notification = null;
+        indicator.setText(this.getTitle());
+        Notification notification;
 
         try {
             this.task.run();

@@ -1,13 +1,10 @@
 package com.github.timo_reymann.ansible_vault_integration.action;
 
-import com.github.timo_reymann.ansible_vault_integration.execution.AnsibleVaultRunnable;
+import com.github.timo_reymann.ansible_vault_integration.execution.runnable.DecryptAnsibleVaultRunnable;
 import com.github.timo_reymann.ansible_vault_integration.execution.AnsibleVaultTask;
-import com.github.timo_reymann.ansible_vault_integration.execution.AnsibleVaultWrapper;
 import com.github.timo_reymann.ansible_vault_integration.util.AnsibleVaultedStringUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
-import com.intellij.ide.ClipboardSynchronizer;
-import com.intellij.ide.CopyPasteManagerEx;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
@@ -15,7 +12,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ui.TextTransferable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
@@ -79,19 +75,7 @@ public class UnvaultAction extends PsiElementBaseIntentionAction implements Inte
     public void invoke(@NotNull Project project, Editor editor, @NotNull PsiElement element) throws IncorrectOperationException {
         String raw = extractText(element);
         final PsiFile containingFile = element.getContainingFile();
-        AnsibleVaultTask task = new AnsibleVaultTask(project, "Decrypt Secret", new AnsibleVaultRunnable() {
-            @Override
-            public void run() throws Exception {
-                String decrypted = AnsibleVaultWrapper.decrypt(project, containingFile, raw);
-                ClipboardSynchronizer.getInstance().setContent(new TextTransferable(decrypted, decrypted), CopyPasteManagerEx.getInstanceEx());
-            }
-
-            @NotNull
-            @Override
-            public String getSuccessMessage() {
-                return "Decrpyted secret has been copied to your clipboard";
-            }
-        });
+        AnsibleVaultTask task = new AnsibleVaultTask(project, "Decrypt Secret", new DecryptAnsibleVaultRunnable(project, containingFile, raw));
 
         ProgressManager.getInstance().run(task);
     }
@@ -100,4 +84,5 @@ public class UnvaultAction extends PsiElementBaseIntentionAction implements Inte
     public boolean startInWriteAction() {
         return false;
     }
+
 }
