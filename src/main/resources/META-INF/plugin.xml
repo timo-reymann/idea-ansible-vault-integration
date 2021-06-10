@@ -13,6 +13,11 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>1.4.0
+                <ul>
+                    <li>Make timeout for commands configurable</li>
+                </ul>
+            </li>
             <li>1.3.0
                 <ul>
                     <li>Add WSL support</li>

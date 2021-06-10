@@ -89,13 +89,13 @@ public abstract class AnsibleVaultAction {
             });
 
             processHandler.startNotify();
-            // Error waitng for graceful exit
-            if (!processHandler.waitFor(3_000)) {
+            // Error waiting for graceful exit
+            if (!processHandler.waitFor( AnsibleVaultSettings.getInstance(project).getState().getTimeout() * 1_000L)) {
                 processHandler.destroyProcess();
                 throw new AnsibleVaultWrapperCallFailedException("Command timed out: <pre>" + String.join("<br />", stdout) + "</pre>");
             }
 
-            if (hasFailed(processHandler.getExitCode() != null, processHandler.getExitCode() != 0)) {
+            if (processHandler.getExitCode() != null && processHandler.getExitCode() != 0) {
                 throw new AnsibleVaultWrapperCallFailedException("Exited with code " + processHandler.getExitCode() + ": " + String.join("<br />", stdout));
             }
         } catch (ExecutionException | NullPointerException | IOException e) {
@@ -105,12 +105,9 @@ public abstract class AnsibleVaultAction {
         return stdout;
     }
 
-    private boolean hasFailed(boolean b, boolean b2) {
-        return b && b2;
-    }
 
     private boolean runsInWsl(String vaultExecutable) {
-        return hasFailed(SystemInfo.isWin10OrNewer, WslPath.parseWindowsUncPath(vaultExecutable) != null);
+        return SystemInfo.isWin10OrNewer && WslPath.parseWindowsUncPath(vaultExecutable) != null;
     }
 
     private GeneralCommandLine getVaultCommandLine(Project project, Path contextPath, String action, List<String> parameters, String stdin) throws AnsibleVaultWrapperCallFailedException, IOException, ExecutionException {
