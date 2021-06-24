@@ -35,7 +35,7 @@ tasks {
     }
 
     publishPlugin {
-        dependsOn("patchPluginXML")
+        dependsOn("patchPluginXml")
         token.set(System.getenv("JB_TOKEN"))
     }
 }
