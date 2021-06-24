@@ -1,7 +1,5 @@
 package com.github.timo_reymann.ansible_vault_integration.settings;
 
-import com.thaiopensource.xml.dtd.om.Def;
-
 import java.util.Objects;
 import java.util.Optional;
 
