@@ -54,11 +54,11 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Quick Actions -->
         <intentionAction>
-            <className>com.github.timo_reymann.ansible_vault_integration.action.UnvaultAction</className>
+            <className>de.timo_reymann.ansible_vault_integration.action.UnvaultAction</className>
             <category>Ansible</category>
         </intentionAction>
         <intentionAction>
-            <className>com.github.timo_reymann.ansible_vault_integration.action.VaultAction</className>
+            <className>de.timo_reymann.ansible_vault_integration.action.VaultAction</className>
             <category>Ansible</category>
         </intentionAction>
         <!-- Configuration -->
