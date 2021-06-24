@@ -31,7 +31,7 @@ tasks {
     }
 
     patchPluginXml {
-        setVersion(version)
+        setVersion(project.version)
     }
 
     publishPlugin {
