@@ -54,18 +54,18 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Quick Actions -->
         <intentionAction>
-            <className>com.github.timo_reymann.ansible_vault_integration.action.UnvaultAction</className>
+            <className>de.timo_reymann.ansible_vault_integration.action.UnvaultAction</className>
             <category>Ansible</category>
         </intentionAction>
         <intentionAction>
-            <className>com.github.timo_reymann.ansible_vault_integration.action.VaultAction</className>
+            <className>de.timo_reymann.ansible_vault_integration.action.VaultAction</className>
             <category>Ansible</category>
         </intentionAction>
         <!-- Configuration -->
-        <projectConfigurable id="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"
+        <projectConfigurable id="de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettings"
                              groupId="tools"
-                             instance="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsConfigurable"/>
+                             instance="de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettingsConfigurable"/>
         <projectService
-                serviceImplementation="com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"/>
+                serviceImplementation="de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettings"/>
     </extensions>
 </idea-plugin>
