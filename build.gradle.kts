@@ -15,6 +15,10 @@ plugins {
     id("com.palantir.git-version") version "0.12.3"
 }
 
+dependencies {
+    implementation(kotlin("reflect"))
+}
+
 intellij {
     version.set(properties["idea-version"] as String)
     pluginName.set( "Ansible Vault Integration")

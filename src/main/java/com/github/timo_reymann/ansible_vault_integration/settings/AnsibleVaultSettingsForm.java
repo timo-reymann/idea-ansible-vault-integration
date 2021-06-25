@@ -1,6 +1,7 @@
 package com.github.timo_reymann.ansible_vault_integration.settings;
 
 import com.intellij.ui.DocumentAdapter;
+import de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,10 +22,13 @@ public class AnsibleVaultSettingsForm {
         return settingsPanel;
     }
 
-    public AnsibleVaultSettingsState getSettingsState() {
+    public AnsibleVaultSettings getSettingsState() {
         Integer timeout = getParsedTimeout();
-
-        return new AnsibleVaultSettingsState(vaultExecutableField.getText(), vaultArgumentsField.getText(), timeout);
+        AnsibleVaultSettings settings = new AnsibleVaultSettings();
+        settings.setVaultArguments(vaultArgumentsField.getText());
+        settings.setTimeout(timeout);
+        settings.setVaultExecutable(vaultExecutableField.getText());
+        return settings;
     }
 
     @Nullable
@@ -38,7 +42,7 @@ public class AnsibleVaultSettingsForm {
         return timeout;
     }
 
-    public void setSettingsState(AnsibleVaultSettingsState settingsState) {
+    public void setSettingsState(AnsibleVaultSettings settingsState) {
         vaultExecutableField.setText(settingsState.getVaultExecutable());
         vaultArgumentsField.setText(settingsState.getVaultArguments());
         executionTimeoutField.setText(String.valueOf(settingsState.getTimeout()));

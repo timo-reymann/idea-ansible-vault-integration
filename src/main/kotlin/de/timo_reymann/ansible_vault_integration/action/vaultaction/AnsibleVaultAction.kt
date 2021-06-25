@@ -1,8 +1,7 @@
 package de.timo_reymann.ansible_vault_integration.action.vaultaction
 
 import de.timo_reymann.ansible_vault_integration.action.execution.AnsibleVaultWrapperCallFailedException
-import com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings
-import com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsState
+import de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettings
 import com.intellij.execution.ExecutionException
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.OSProcessHandler
@@ -73,7 +72,7 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
             })
             processHandler.startNotify()
             // Error waiting for graceful exit
-            if (!processHandler.waitFor(AnsibleVaultSettings.getInstance(project).state!!.timeout * 1000L)) {
+            if (!processHandler.waitFor(AnsibleVaultSettings.getInstance(project).state!!.timeout!! * 1000L)) {
                 processHandler.destroyProcess()
                 throw AnsibleVaultWrapperCallFailedException(
                     "Command timed out: <pre>" + java.lang.String.join(
@@ -113,8 +112,7 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
         stdin: String
     ): GeneralCommandLine {
         val state = AnsibleVaultSettings.getInstance(project).state
-        val vaultExecutable = state!!.vaultExecutable()
-            .orElseThrow { AnsibleVaultWrapperCallFailedException("No ansible-vault executable set") }
+        val vaultExecutable = state.vaultExecutable
         val vaultArguments = getVaultArguments(state)
         val stdinFile = createTempFile(stdin)
         val ansibleCommandLineTransformer: AnsibleCommandLineTransformer = getCommandLineTransformer(vaultExecutable)
@@ -137,10 +135,10 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
         else -> NoOpAnsibleCommandLineTransformer()
     }
 
-    private fun getVaultArguments(state: @Nullable AnsibleVaultSettingsState) =
-        state.vaultArguments()
-            .orElse("")
-            .split(" ").toTypedArray()
+    private fun getVaultArguments(state: @Nullable AnsibleVaultSettings) =
+        state.vaultArguments
+            .split(" ")
+            .toTypedArray()
             .stream()
             .filter { `val`: String -> `val`.trim { it <= ' ' } != "" }
             .collect(Collectors.toList())
