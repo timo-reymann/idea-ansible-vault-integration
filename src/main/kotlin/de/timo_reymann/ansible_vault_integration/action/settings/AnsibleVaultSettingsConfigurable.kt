@@ -1,74 +1,79 @@
 package de.timo_reymann.ansible_vault_integration.action.settings
 
-import com.github.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsForm
-import com.intellij.openapi.fileChooser.FileChooserDescriptor
-import com.intellij.openapi.fileChooser.ex.FileChooserDialogImpl
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.options.ConfigurationException
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.openapi.vfs.VirtualFileManager
-import org.apache.http.util.TextUtils
+import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.intellij.ui.components.JBTextField
+import com.intellij.ui.layout.panel
 import org.jetbrains.annotations.Nls
-import java.awt.event.ActionEvent
+import java.io.File
 import javax.swing.JComponent
 
 /**
  * Configurable for ansible-vault configuration
  */
-class AnsibleVaultSettingsConfigurable(private val project: Project) : Configurable {
-    private val pluginSettingsForm: AnsibleVaultSettingsForm = AnsibleVaultSettingsForm()
+open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
+    private lateinit var executionTimeoutField: JBTextField
+    private lateinit var argumentsField: JBTextField
+    private lateinit var executableField: TextFieldWithBrowseButton
     private val pluginSettings: AnsibleVaultSettings = AnsibleVaultSettings.getInstance(project)
-    private var ansibleVaultExecutableChooser: FileChooserDescriptor? = null
-    private var selectedVaultExecutable: VirtualFile? = null
 
-    /**
-     * Initialize file chooser for ansible-vault executable
-     */
-    private fun initExecutableChooser() {
-        ansibleVaultExecutableChooser = FileChooserDescriptor(true, false, false, false, false, false)
-        var ansibleVaultExecutable: String? = ""
-        if (pluginSettings.state != null) {
-            ansibleVaultExecutable = pluginSettings.state!!.vaultExecutable
+    private val panel = panel {
+        row("Executable") {
+            textFieldWithBrowseButton(
+                prop = pluginSettings::vaultExecutable,
+                browseDialogTitle = "Select ansible vault executable",
+                fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFileOrExecutableAppDescriptor()
+            ).comment("Path to ansible vault executable or wrapper script")
+                .also { executableField = it.component }
         }
 
-        if (!TextUtils.isEmpty(ansibleVaultExecutable)) {
-            selectedVaultExecutable = VirtualFileManager.getInstance()
-                .findFileByUrl(getFileUrl(ansibleVaultExecutable))
+        row("Command line arguments") {
+            textField(pluginSettings::vaultArguments)
+                .comment("Arguments to suffix to execution")
+                .focused()
+                .also { argumentsField = it.component }
         }
 
-        pluginSettingsForm.vaultExecutableChooser.addActionListener { e: ActionEvent? ->
-            val chosenFile = FileChooserDialogImpl(ansibleVaultExecutableChooser!!, project)
-                .choose(project, selectedVaultExecutable)
-            if (chosenFile.size != 1) {
-                return@addActionListener
-            }
-            val file = chosenFile[0] ?: return@addActionListener
-            selectedVaultExecutable = file
-            pluginSettingsForm.vaultExecutableField.text = file.canonicalPath
+        row("Execution Timeout") {
+            textField(
+                { pluginSettings.timeout.toString() },
+                { pluginSettings.timeout = it.tryParseInt() ?: return@textField }
+            )
+                .comment("Amount in seconds to wait before stopping execution forcefully")
+                .also { executionTimeoutField = it.component }
         }
+
+        noteRow("""
+        You have a complex setup with different secrets for different maturities? - 
+        <a href="https://plugins.jetbrains.com/plugin/14353-ansible-vault-integration/tutorials/vault-file-as-script">I got you covered!</a>
+        """.trimIndent())
     }
-
-    private fun getFileUrl(path: String?): String = "file://$path"
 
     override fun getDisplayName(): @Nls String = "Ansible Vault"
-
     override fun getHelpTopic(): String = "Configure Ansible vault"
-
-    override fun createComponent(): JComponent? = pluginSettingsForm.settingsPanel
-
-    override fun isModified(): Boolean = pluginSettingsForm.settingsState != pluginSettings.state
-
+    override fun createComponent(): JComponent = panel
+    override fun isModified(): Boolean = panel.isModified()
     override fun apply() {
-        pluginSettings.loadState(pluginSettingsForm.settingsState)
-    }
-
-    override fun reset() {
-        if (pluginSettings.state != null) {
-            pluginSettingsForm.settingsState = pluginSettings.state
+        if (!File(executableField.text).exists()) {
+            throw ConfigurationException("Invalid vault executable")
         }
+
+        val timeout = executionTimeoutField.text.tryParseInt()
+        if (timeout == null || timeout < 1) {
+            throw ConfigurationException("Invalid execution timeout, must be greater than 1")
+        }
+
+        panel.apply()
     }
 
-    init {
-        initExecutableChooser()
-    }
+    override fun reset() = panel.reset()
+}
+
+private fun String.tryParseInt(): Int? = try {
+    Integer.parseInt(this)
+} catch (e: Exception) {
+    null
 }
