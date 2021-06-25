@@ -13,6 +13,12 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>2.0.0
+                <ul>
+                    <li>More context for configuration and better pre-validation</li>
+                    <li>Plugin completely rewritten in Kotlin</li>
+                </ul>
+            </li>
             <li>1.4.0
                 <ul>
                     <li>Make timeout for commands configurable</li>
