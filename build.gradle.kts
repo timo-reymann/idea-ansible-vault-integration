@@ -10,7 +10,7 @@ repositories {
 
 plugins {
     id("java")
-    kotlin("jvm") version "1.5.0"
+    kotlin("jvm") version "1.5.20"
     id("org.jetbrains.intellij") version "1.0"
     id("com.palantir.git-version") version "0.12.3"
 }
