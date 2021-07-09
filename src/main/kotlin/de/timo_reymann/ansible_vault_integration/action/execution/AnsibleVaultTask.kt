@@ -31,7 +31,7 @@ class AnsibleVaultTask(
                 NotificationType.INFORMATION
             )
         } catch (e: Exception) {
-            log.error(e)
+            log.warn(e)
             notification = Notification(
                 NOTIFICATION_GROUP_ID,
                 NOTIFICATION_ERROR_ID,

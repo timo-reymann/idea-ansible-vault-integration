@@ -13,6 +13,7 @@ import de.timo_reymann.ansible_vault_integration.action.runnable.EncryptAnsibleV
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
+import org.jetbrains.yaml.psi.YAMLKeyValue
 
 /**
  * Vault Action to provide unvault for yaml files
@@ -30,9 +31,10 @@ class VaultAction : PsiElementBaseIntentionAction(), IntentionAction {
 
         // Allow any kind of text in single or dobule quotes or without quotes
         val elementType = element.node.elementType
-        return elementType == YAMLTokenTypes.TEXT
+        return (elementType == YAMLTokenTypes.TEXT
                 || elementType == YAMLTokenTypes.SCALAR_STRING
-                || elementType == YAMLTokenTypes.SCALAR_DSTRING
+                || elementType == YAMLTokenTypes.SCALAR_DSTRING) &&
+                element.parent?.parent is YAMLKeyValue
     }
 
     private fun extractValue(element: PsiElement): String {
