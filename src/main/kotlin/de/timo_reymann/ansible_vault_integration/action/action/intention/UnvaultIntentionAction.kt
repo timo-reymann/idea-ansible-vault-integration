@@ -1,29 +1,22 @@
-package de.timo_reymann.ansible_vault_integration.action
+package de.timo_reymann.ansible_vault_integration.action.action.intention
 
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
-import com.intellij.codeInsight.intention.IntentionAction
-import org.jetbrains.annotations.Nls
-import com.intellij.psi.PsiElement
-import org.jetbrains.yaml.YAMLLanguage
-import de.timo_reymann.ansible_vault_integration.action.util.AnsibleVaultedStringUtil
-import org.jetbrains.yaml.YAMLTokenTypes
-import kotlin.Throws
-import com.intellij.util.IncorrectOperationException
-import de.timo_reymann.ansible_vault_integration.action.execution.AnsibleVaultTask
-import de.timo_reymann.ansible_vault_integration.action.runnable.DecryptAnsibleVaultRunnable
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
+import com.intellij.util.IncorrectOperationException
+import de.timo_reymann.ansible_vault_integration.action.runnable.DecryptStringAnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.action.util.AnsibleVaultedStringUtil
+import org.jetbrains.yaml.YAMLLanguage
+import org.jetbrains.yaml.YAMLTokenTypes
 
 /**
  * Unvault Action to provide unvault for yaml files
  */
-class UnvaultAction : PsiElementBaseIntentionAction(), IntentionAction {
-    override fun getText(): @Nls(capitalization = Nls.Capitalization.Sentence) String = "Unvault ansible secret"
-
-    override fun getFamilyName(): @Nls(capitalization = Nls.Capitalization.Sentence) String = text
-
-    override fun isAvailable(project: Project, editor: Editor, element: PsiElement): Boolean {
+class UnvaultIntentionAction : BaseIntentionAction("Unvault ansible secret") {
+    override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
+        if (!super.isAvailable(project, editor, element)) {
+            return false
+        }
         return when {
             element.language != YAMLLanguage.INSTANCE -> false
             else -> AnsibleVaultedStringUtil.isVaultedString(extractText(element))
@@ -61,15 +54,6 @@ class UnvaultAction : PsiElementBaseIntentionAction(), IntentionAction {
     override fun invoke(project: Project, editor: Editor, element: PsiElement) {
         val raw = extractText(element) ?: return
         val containingFile = element.containingFile
-        val task = AnsibleVaultTask(
-            project,
-            "Decrypt secret",
-            DecryptAnsibleVaultRunnable(project, containingFile, raw)
-        )
-
-        ProgressManager.getInstance()
-            .run(task)
+        runTask(project, DecryptStringAnsibleVaultRunnable(project, containingFile, raw))
     }
-
-    override fun startInWriteAction(): Boolean = false
 }

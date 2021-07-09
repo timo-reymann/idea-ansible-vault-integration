@@ -1,4 +1,4 @@
-package de.timo_reymann.ansible_vault_integration.action.vaultaction
+package de.timo_reymann.ansible_vault_integration.action.execution.action
 
 import de.timo_reymann.ansible_vault_integration.action.util.AnsibleVaultedStringUtil
 import com.intellij.openapi.project.Project
