@@ -5,6 +5,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import de.timo_reymann.ansible_vault_integration.action.execution.action.AnsibleVaultEncryptAction
+import de.timo_reymann.ansible_vault_integration.action.util.AnsibleVaultedStringUtil
 
 class EncryptFileAnsibleVaultRunnable(
     private val project: Project,

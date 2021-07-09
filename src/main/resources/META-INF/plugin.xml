@@ -83,13 +83,8 @@
     </extensions>
     <actions>
         <action id="de.timo_reymann.ansible_vault_integration.action.action.menu.VaultFileMenuAction"
-                class="de.timo_reymann.ansible_vault_integration.action.action.menu.VaultFileMenuAction" text="Vault File"
-                description="Encrypt the given file using ansible-vault">
-            <add-to-group group-id="CutCopyPasteGroup" anchor="last"/>
-        </action>
-        <action id="de.timo_reymann.ansible_vault_integration.action.action.menu.UnvaultFileMenuAction"
-                class="de.timo_reymann.ansible_vault_integration.action.action.menu.UnvaultFileMenuAction" text="Unvault File"
-                description="Decrypt the given file using ansible-vault">
+                class="de.timo_reymann.ansible_vault_integration.action.action.menu.VaultFileMenuAction" text="Vault/Unvault File"
+                description="Encrypt/Decrypt the given file using ansible-vault">
             <add-to-group group-id="CutCopyPasteGroup" anchor="last"/>
         </action>
     </actions>

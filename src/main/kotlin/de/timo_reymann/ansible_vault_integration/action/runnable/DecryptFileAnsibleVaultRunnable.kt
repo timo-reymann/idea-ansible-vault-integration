@@ -1,13 +1,11 @@
 package de.timo_reymann.ansible_vault_integration.action.runnable
 
-import com.intellij.ide.ClipboardSynchronizer
-import com.intellij.ide.CopyPasteManagerEx
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
-import com.intellij.util.ui.TextTransferable
 import de.timo_reymann.ansible_vault_integration.action.execution.action.AnsibleVaultDecryptAction
+import de.timo_reymann.ansible_vault_integration.action.util.AnsibleVaultedStringUtil
 
 class DecryptFileAnsibleVaultRunnable(
     private val project: Project,
@@ -16,7 +14,7 @@ class DecryptFileAnsibleVaultRunnable(
 ) : AnsibleVaultRunnable {
     @Throws(Exception::class)
     override fun run() {
-        val decrypted = AnsibleVaultDecryptAction(project, containingFile, raw)
+        val decrypted = AnsibleVaultDecryptAction(project, containingFile, AnsibleVaultedStringUtil.addPrefix(raw))
             .execute()
         WriteCommandAction.runWriteCommandAction(project) {
             FileDocumentManager.getInstance()

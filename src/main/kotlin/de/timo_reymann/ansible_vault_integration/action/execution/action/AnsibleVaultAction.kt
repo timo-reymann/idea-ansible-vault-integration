@@ -67,7 +67,8 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
                     if (line.incrementAndGet() == 1L) {
                         return
                     }
-                    stdout.add(stdoutLine)
+                    // Remove trailing line breaks
+                    stdout.add(event.text.trimEnd())
                 }
             })
             processHandler.startNotify()
