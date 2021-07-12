@@ -13,6 +13,11 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>TBD
+                <ul>
+                    <li>Add vault/unvault action for entire files</li>
+                </ul>
+            </li>
             <li>2.0.1
                 <ul>
                     <li>Dont provide context action for decryption for full encrypted files (<a
