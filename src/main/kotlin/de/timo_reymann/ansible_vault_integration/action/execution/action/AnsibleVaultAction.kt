@@ -1,4 +1,4 @@
-package de.timo_reymann.ansible_vault_integration.action.vaultaction
+package de.timo_reymann.ansible_vault_integration.action.execution.action
 
 import de.timo_reymann.ansible_vault_integration.action.execution.AnsibleVaultWrapperCallFailedException
 import de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettings
@@ -67,7 +67,8 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
                     if (line.incrementAndGet() == 1L) {
                         return
                     }
-                    stdout.add(stdoutLine)
+                    // Remove trailing line breaks
+                    stdout.add(event.text.trimEnd())
                 }
             })
             processHandler.startNotify()

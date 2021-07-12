@@ -4,10 +4,10 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import de.timo_reymann.ansible_vault_integration.action.vaultaction.AnsibleVaultEncryptAction
+import de.timo_reymann.ansible_vault_integration.action.execution.action.AnsibleVaultEncryptAction
 import org.jetbrains.yaml.YAMLElementGenerator
 
-class EncryptAnsibleVaultRunnable(
+class EncryptStringAnsibleVaultRunnable(
     private val project: Project,
     private val containingFile: PsiFile,
     private val content: String,
