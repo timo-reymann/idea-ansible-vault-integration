@@ -9,11 +9,10 @@ import de.timo_reymann.ansible_vault_integration.action.execution.AnsibleVaultTa
 import de.timo_reymann.ansible_vault_integration.action.runnable.AnsibleVaultRunnable
 import de.timo_reymann.ansible_vault_integration.action.runnable.DecryptFileAnsibleVaultRunnable
 import de.timo_reymann.ansible_vault_integration.action.runnable.EncryptFileAnsibleVaultRunnable
-import de.timo_reymann.ansible_vault_integration.action.util.AnsibleVaultedStringUtil
 import org.jetbrains.yaml.psi.YAMLFile
 import setVisible
 
-class VaultFileMenuAction : AnAction() {
+open class VaultFileMenuAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val psiFile = e.getData(LangDataKeys.PSI_FILE) ?: return
         val content = psiFile.text ?: return
@@ -41,7 +40,7 @@ class VaultFileMenuAction : AnAction() {
         e.setVisible(true)
     }
 
-    protected fun runTask(psiFile: PsiFile, title : String, runnable: AnsibleVaultRunnable) {
+    private fun runTask(psiFile: PsiFile, title : String, runnable: AnsibleVaultRunnable) {
         val task = AnsibleVaultTask(
             psiFile.project,
             title,
