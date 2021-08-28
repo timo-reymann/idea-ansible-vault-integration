@@ -13,6 +13,11 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>2.1.1
+                <ul>
+                    <li>Fix missing intention description errors</li>
+                </ul>
+            </li>
             <li>2.1.0
                 <ul>
                     <li>
