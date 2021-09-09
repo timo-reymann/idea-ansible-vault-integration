@@ -9,18 +9,14 @@ import java.util.stream.Collectors
 object AnsibleVaultedStringUtil {
     private const val PREFIX = "!vault |"
 
-    fun isVaultedString(input: String?): Boolean {
-        return input != null
-                && input.trim { it <= ' ' }.startsWith(PREFIX)
-    }
+    fun isVaultedString(input: String?): Boolean = input != null
+            && input.trim { it <= ' ' }.startsWith(PREFIX)
 
-    fun removePrefix(vaultedString: String): String {
-        return vaultedString.splitLines()
-            .stream()
-            .skip(1)
-            .map { obj: String -> obj.trim { it <= ' ' } }
-            .collect(Collectors.joining("\n"))
-    }
+    fun removePrefix(vaultedString: String): String = vaultedString.splitLines()
+        .stream()
+        .skip(1)
+        .map { obj: String -> obj.trim { it <= ' ' } }
+        .collect(Collectors.joining("\n"))
 
     fun addPrefix(vaultedString: String): String {
         val rawLines = vaultedString.splitLines()
@@ -31,7 +27,5 @@ object AnsibleVaultedStringUtil {
     }
 }
 
-private fun String.splitLines(): Array<String> {
-    return this.split('\n')
-        .toTypedArray()
-}
+private fun String.splitLines(): Array<String> = this.split('\n')
+    .toTypedArray()

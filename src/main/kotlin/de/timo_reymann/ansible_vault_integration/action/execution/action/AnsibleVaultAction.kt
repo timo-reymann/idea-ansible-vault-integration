@@ -100,9 +100,8 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
         return stdout
     }
 
-    private fun runsInWsl(vaultExecutable: String): Boolean {
-        return SystemInfo.isWin10OrNewer && WslPath.parseWindowsUncPath(vaultExecutable) != null
-    }
+    private fun runsInWsl(vaultExecutable: String): Boolean =
+        SystemInfo.isWin10OrNewer && WslPath.parseWindowsUncPath(vaultExecutable) != null
 
     @Throws(AnsibleVaultWrapperCallFailedException::class, IOException::class, ExecutionException::class)
     private fun getVaultCommandLine(

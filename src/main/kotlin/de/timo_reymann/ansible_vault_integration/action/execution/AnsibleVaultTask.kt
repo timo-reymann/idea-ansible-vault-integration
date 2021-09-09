@@ -46,7 +46,7 @@ class AnsibleVaultTask(
     companion object {
         private val log = Logger.getInstance(AnsibleVaultTask::class.java)
 
-        val NOTIFICATION_GROUP_ID = AnsibleVaultTask::class.java.canonicalName
+        val NOTIFICATION_GROUP_ID: String = AnsibleVaultTask::class.java.canonicalName
         const val NOTIFICATION_ERROR_ID = "Error"
         const val NOTIFICATION_SUCCESS_ID = "Success"
     }
