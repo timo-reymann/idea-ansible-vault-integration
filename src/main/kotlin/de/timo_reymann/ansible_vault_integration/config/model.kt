@@ -30,10 +30,8 @@ inline infix fun <reified T : Any> T.merge(other: T): T {
 fun mergeConfigs(configs: List<AnsibleConfigurationFile>): AnsibleConfigurationFile {
     var final = AnsibleConfigurationFile(null, null, null)
 
-    configs.sortedBy { it.priority }
-        .forEach {
-            final = final merge it
-        }
+    configs.sortedByDescending { it.priority }
+        .forEach { final = final merge it }
 
     return final.copy(checksum = null,priority = null)
 }
