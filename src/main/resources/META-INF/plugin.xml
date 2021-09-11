@@ -13,6 +13,14 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>2.2.0
+                <ul>
+                    <li>
+                        Add support for ansible vault-identity-list
+                        (<a href="https://github.com/timo-reymann/idea-ansible-vault-integration/issues/15">#15</a>)
+                    </li>
+                </ul>
+            </li>
             <li>2.1.2
                 <ul>
                     <li>Fix missing intention description errors</li>
