@@ -80,23 +80,24 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Quick Actions -->
         <intentionAction>
-            <className>de.timo_reymann.ansible_vault_integration.action.action.intention.UnvaultIntentionAction</className>
+            <className>de.timo_reymann.ansible_vault_integration.intention.UnvaultIntentionAction</className>
             <category>Ansible</category>
         </intentionAction>
         <intentionAction>
-            <className>de.timo_reymann.ansible_vault_integration.action.action.intention.VaultIntentionAction</className>
+            <className>de.timo_reymann.ansible_vault_integration.intention.VaultIntentionAction</className>
             <category>Ansible</category>
         </intentionAction>
         <!-- Configuration -->
-        <projectConfigurable id="de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettings"
+        <projectConfigurable id="de.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"
                              groupId="tools"
-                             instance="de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettingsConfigurable"/>
+                             instance="de.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsConfigurable"/>
         <projectService
-                serviceImplementation="de.timo_reymann.ansible_vault_integration.action.settings.AnsibleVaultSettings"/>
+                serviceImplementation="de.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"/>
+        <projectService serviceImplementation="de.timo_reymann.ansible_vault_integration.config.AnsibleConfigurationService" />
     </extensions>
     <actions>
-        <action id="de.timo_reymann.ansible_vault_integration.action.action.menu.VaultFileMenuAction"
-                class="de.timo_reymann.ansible_vault_integration.action.action.menu.VaultFileMenuAction" text="Vault/Unvault File"
+        <action id="de.timo_reymann.ansible_vault_integration.execution.action.action.menu.VaultFileMenuAction"
+                class="de.timo_reymann.ansible_vault_integration.intention.menu.VaultFileMenuAction" text="Vault/Unvault File"
                 description="Encrypt/Decrypt the given file using ansible-vault">
             <add-to-group group-id="CutCopyPasteGroup" anchor="last"/>
         </action>
