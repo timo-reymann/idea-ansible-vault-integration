@@ -4,3 +4,5 @@ updates:
     schedule:
       interval: 'weekly'
     package-ecosystem: 'gradle'
+    reviewers:
+      - timo-reymann
