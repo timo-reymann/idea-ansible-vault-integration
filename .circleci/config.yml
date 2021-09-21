@@ -1,4 +1,8 @@
 version: '2.1'
+
+orbs:
+  github-release: timo-reymann/github-release@1.0.1
+
 executors:
   gradle:
     docker:
