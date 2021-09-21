@@ -104,11 +104,11 @@ workflows:
   continious:
     jobs:
       - test:
-        filters:
-          branches:
-            only: /.*/
-          tags:
-            only: /.*/
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
       - build:
           filters:
             branches:
