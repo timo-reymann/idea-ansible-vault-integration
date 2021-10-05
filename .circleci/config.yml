@@ -1,15 +1,12 @@
 version: '2.1'
 
 orbs:
-  github-release: timo-reymann/github-release@1.0.1
+  github-release: timo-reymann/github-release@1.1.0
 
 executors:
   gradle:
     docker:
       - image: circleci/openjdk:11.0.3-jdk-stretch
-  go:
-    docker:
-      - image: circleci/golang:1.15
 
 commands:
   retrieve_cache:
@@ -77,17 +74,6 @@ jobs:
           name: Publish plugin
           command: ./gradlew publishPlugin
 
-  github_release:
-    executor: go
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-          name: Retrieve plugin file
-      - github-release/setup
-      - github-release/create-release
-      - github-release/upload-files:
-          file_pattern: 'build/distributions/*'
 workflows:
   continious:
     jobs:
@@ -105,7 +91,9 @@ workflows:
               only: /.*/
           requires:
             - test
-      - github_release:
+      - github-release/create-release-with-files:
+          attach-workspace: true
+          file_pattern: 'build/distributions/*'
           requires:
             - build
           filters:
