@@ -39,12 +39,12 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
     }
 
     @Throws(AnsibleVaultWrapperCallFailedException::class)
-    open fun execute(): String = executeCommand().joinToString("\n")
+    open fun execute(): String = executeCommand()
 
     @Throws(AnsibleVaultWrapperCallFailedException::class)
-    private fun executeCommand(): List<String> {
+    private fun executeCommand(): String {
         val processHandler: ProcessHandler
-        val stdout: MutableList<String> = ArrayList()
+        val stdout: StringBuffer = StringBuffer()
         val line = AtomicLong(0)
         try {
             val contextPath = contextFile.virtualFile.toNioPath()
@@ -66,7 +66,7 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
                         return
                     }
                     // Remove trailing line breaks
-                    stdout.add(event.text.trimEnd())
+                    stdout.append(event.text)
                 }
             })
             processHandler.startNotify()
@@ -95,7 +95,7 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
         } catch (e: IOException) {
             throw AnsibleVaultWrapperCallFailedException("Internal error: " + e.message)
         }
-        return stdout
+        return stdout.toString()
     }
 
     private fun runsInWsl(vaultExecutable: String): Boolean =

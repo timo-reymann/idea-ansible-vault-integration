@@ -13,6 +13,11 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>2.2.1
+                <ul>
+                    <li>Fix invalid padding in some cases of ansible vault context action</li>
+                </ul>
+            </li>
             <li>2.2.0
                 <ul>
                     <li>
