@@ -7,8 +7,14 @@ Ansible Vault Integration
 [![Rating](https://img.shields.io/jetbrains/plugin/r/rating/14353-ansible-vault-integration)](https://plugins.jetbrains.com/plugin/14353-ansible-vault-integration/reviews)
 [![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/)
 
-Integrate the ansible vault directly into IntelliJ IDEA with context actions for vaulting and unvaulting secrets. This
-makes working with ansible-vault a breeze!
+<p align="center">
+	<img width="300" src="./src/main/resources/META-INF/pluginIcon.svg">
+</p>
+
+<p align="center">
+	Integrate the ansible vault directly into IntelliJ IDEA with context actions for vaulting and unvaulting secrets. This
+	makes working with ansible-vault a breeze!
+</p>
 
 ## Whats in the box?
 
