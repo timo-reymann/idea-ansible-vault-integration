@@ -3,7 +3,6 @@ package de.timo_reymann.ansible_vault_integration.config
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
-import de.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings
 
 class AnsibleConfigurationService(private val project: Project) {
     private val ansibleConfigurationFileFinder = AnsibleConfigurationFileFinder(project)

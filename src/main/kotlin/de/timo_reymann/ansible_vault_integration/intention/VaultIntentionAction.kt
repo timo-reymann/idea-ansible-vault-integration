@@ -8,17 +8,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.util.IncorrectOperationException
 import com.intellij.util.ui.JBUI
 import de.timo_reymann.ansible_vault_integration.config.AnsibleConfigurationService
-import de.timo_reymann.ansible_vault_integration.config.VaultIdentity
 import de.timo_reymann.ansible_vault_integration.runnable.EncryptStringAnsibleVaultRunnable
 import org.jetbrains.yaml.YAMLTokenTypes
 import org.jetbrains.yaml.psi.YAMLKeyValue
-import java.awt.Component
-import javax.swing.DefaultListCellRenderer
-import javax.swing.Icon
-import javax.swing.JList
-import javax.swing.ListSelectionModel
-import javax.swing.border.Border
-import javax.swing.border.EmptyBorder
 
 /**
  * Vault Action to provide unvault for yaml files

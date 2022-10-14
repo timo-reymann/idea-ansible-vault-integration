@@ -5,7 +5,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.util.ui.JBUI
 import de.timo_reymann.ansible_vault_integration.config.VaultIdentity
-import de.timo_reymann.ansible_vault_integration.runnable.EncryptStringAnsibleVaultRunnable
 import java.awt.Component
 import java.util.function.Consumer
 import javax.swing.DefaultListCellRenderer
