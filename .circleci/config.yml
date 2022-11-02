@@ -28,6 +28,7 @@ commands:
 
 jobs:
   test:
+    resource_class: large
     executor: gradle
     steps:
       - checkout
