@@ -115,6 +115,10 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
         val stdinFile = createTempFile(stdin)
         val ansibleCommandLineTransformer: AnsibleCommandLineTransformer = getCommandLineTransformer(vaultExecutable)
 
+        if(!File(vaultExecutable).exists()) {
+            throw AnsibleVaultWrapperCallFailedException("Executable configured could not be found")
+        }
+
         return AnsibleVaultCommandLineBuilder(vaultExecutable, ansibleCommandLineTransformer)
             .withParameter(action)
             .withFilePathParameter(stdinFile.absolutePath)
