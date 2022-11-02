@@ -6,7 +6,7 @@ orbs:
 executors:
   gradle:
     docker:
-      - image: cimg/openjdk:11.0.6-jdk-stretch
+      - image: "cimg/openjdk:11.0"
 
 commands:
   retrieve_cache:
