@@ -37,10 +37,12 @@ Got a custom vault file for your project? - I got you covered with custom comman
 
 In case you are using a script to provide your vault secret, the plugin provides the following environment variables:
 
-| Environment variable                  | Content                                                               |
-| :------------------------------------ | :-------------------------------------------------------------------- |
-| IDEA_ANSIBLE_VAULT_CONTEXT_FILE       | Absolute path to the file the vault/unvault action was triggered in   |
-| IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY  | Name of the directory the action was triggered in, **NO** path        |
+| Environment variable                         | Content                                                             |
+|:---------------------------------------------|:--------------------------------------------------------------------|
+| IDEA_ANSIBLE_VAULT_CONTEXT_FILE              | Absolute path to the file the vault/unvault action was triggered in |
+| IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY         | Name of the directory the action was triggered in, **NO** path      |
+| IDEA_ANSIBLE_VAULT_CONTEXT_PROJECT_BASE_PATH | Absolute path of the project the action was triggered in            |
+| IDEA_ANSIBLE_VAULT_CONTEXT_PROJECT_NAME      | Name of the project the action was triggered in                    |
 
 #### Examples
 

@@ -124,6 +124,8 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
             .withFilePathParameter(stdinFile.absolutePath)
             .withEnv(ENVIRONMENT_CONTEXT_DIRECTORY, contextPath.toFile().parentFile.name)
             .withFilePathEnv(ENVIRONMENT_CONTEXT_FILE, contextPath.toString())
+            .withEnv(ENVIRONMENT_CONTEXT_PROJECT_BASE_PATH, project.basePath)
+            .withEnv(ENVIRONMENT_CONTEXT_PROJECT_NAME, project.name)
             .getCommandLine(project)!!
             .withWorkDirectory(project.basePath)
             .withParameters(parameters)
@@ -147,7 +149,12 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
 
     companion object {
         private const val ENVIRONMENT_PREFIX = "IDEA_ANSIBLE_VAULT_"
+
         private const val ENVIRONMENT_CONTEXT_FILE = ENVIRONMENT_PREFIX + "CONTEXT_FILE"
         private const val ENVIRONMENT_CONTEXT_DIRECTORY = ENVIRONMENT_PREFIX + "CONTEXT_DIRECTORY"
+
+        private const val ENVIRONMENT_CONTEXT_PROJECT_PREFIX = ENVIRONMENT_PREFIX + "CONTEXT_PROJECT_"
+        private const val ENVIRONMENT_CONTEXT_PROJECT_BASE_PATH = ENVIRONMENT_CONTEXT_PROJECT_PREFIX + "BASE_PATH"
+        private const val ENVIRONMENT_CONTEXT_PROJECT_NAME = ENVIRONMENT_CONTEXT_PROJECT_PREFIX + "NAME"
     }
 }
