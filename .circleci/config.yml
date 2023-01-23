@@ -93,7 +93,7 @@ workflows:
           requires:
             - test
       - github-cli/release:
-          tag: <<pipeline.git.tag>>
+          tag: $CIRCLE_TAG
           additional_args: "--generate-notes"
           requires:
             - build
