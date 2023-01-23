@@ -74,6 +74,17 @@ jobs:
       - run:
           name: Publish plugin
           command: ./gradlew publishPlugin
+  create_github_release:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - github-cli/install:
+          version: "2.21.2"
+      - run:
+          name: Publish release
+          command: |
+            gh release create ${CIRCLE_TAG} --generate-notes
 
 workflows:
   continious:
@@ -92,10 +103,7 @@ workflows:
               only: /.*/
           requires:
             - test
-      - github-cli/release:
-          tag: $CIRCLE_TAG
-          additional_args: "--generate-notes"
-          version: "2.21.2"
+      - create_github_release:
           filters:
             branches:
               ignore: /.*/
