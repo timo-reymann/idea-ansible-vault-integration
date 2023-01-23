@@ -1,7 +1,7 @@
 version: '2.1'
 
 orbs:
-  github-release: timo-reymann/github-release@1.1.0
+  github-cli: circleci/github-cli@2.2.0
 
 executors:
   gradle:
@@ -92,9 +92,9 @@ workflows:
               only: /.*/
           requires:
             - test
-      - github-release/create-release-with-files:
-          attach-workspace: true
-          file_pattern: 'build/distributions/*'
+      - github-cli/release:
+          tag: <<pipeline.git.tag>>
+          additional_args: "--generate-notes"
           requires:
             - build
           filters:
