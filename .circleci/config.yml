@@ -95,8 +95,7 @@ workflows:
       - github-cli/release:
           tag: $CIRCLE_TAG
           additional_args: "--generate-notes"
-          requires:
-            - build
+          version: "2.21.2"
           filters:
             branches:
               ignore: /.*/
