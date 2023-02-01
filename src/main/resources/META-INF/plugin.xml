@@ -13,6 +13,14 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>3.0.0
+                <ul>
+                    <li>
+                        Don't omit empty lines of decrypted content
+                        (<a href="https://github.com/timo-reymann/idea-ansible-vault-integration/pull/49">#49</a>) - by <a href="https://github.com/4ch1m">@4ch1m</a>
+                        - this might break current assumptions or formats so please check before updating and report if this change affects you.
+                    </li>
+                </ul>
             <li>2.4.0
                 <ul>
                     <li>
