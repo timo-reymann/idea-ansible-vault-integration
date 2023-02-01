@@ -56,8 +56,8 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
                 override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
                     val stdoutLine = event.text.trim { it <= ' ' }
 
-                    // Empty line or line break
-                    if (stdoutLine == "" || stdoutLine.startsWith("WARNING:")) {
+                    // Omit warnings
+                    if (stdoutLine.startsWith("WARNING:")) {
                         return
                     }
 
