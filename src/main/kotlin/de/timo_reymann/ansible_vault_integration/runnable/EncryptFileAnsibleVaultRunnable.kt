@@ -25,5 +25,5 @@ class EncryptFileAnsibleVaultRunnable(
     }
 
     override val successMessage: String
-        get() = "File vaulted"
+        get() = "File encrypted"
 }
