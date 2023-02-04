@@ -27,27 +27,26 @@ open class VaultFileMenuAction : AnAction() {
 
         e.getData(LangDataKeys.VIRTUAL_FILE_ARRAY)?.forEach {
             val psiFile = psiManager.findFile(it) ?: return@forEach
-
-            if (psiFile is PsiBinaryFile) {
-                Notifications.Bus.notify(Notification(
-                    VaultFileMenuAction::class.java.canonicalName,
-                    NOTIFICATION_ERROR_TITLE,
-                    NOTIFICATION_BINARIES_NOT_SUPPORTED,
-                    NotificationType.ERROR
-                ))
-
-                return@forEach
-            }
-
-            if (psiFile.text.isNullOrEmpty()) {
-                return@forEach
-            }
-
             processFile(vaultIdentities, psiFile)
         }
     }
 
     private fun processFile(vaultIdentities: List<VaultIdentity>?, psiFile: PsiFile) {
+        if (psiFile is PsiBinaryFile) {
+            Notifications.Bus.notify(Notification(
+                VaultFileMenuAction::class.java.canonicalName,
+                NOTIFICATION_ERROR_TITLE,
+                NOTIFICATION_BINARIES_NOT_SUPPORTED,
+                NotificationType.ERROR
+            ))
+
+            return
+        }
+
+        if (psiFile.text.isNullOrEmpty()) {
+            return
+        }
+
         val fileIsEncrypted = psiFile.text.startsWith("\$ANSIBLE_VAULT")
         val progressTitle = "${if (fileIsEncrypted) "Decrypting" else "Encrypting"} file(s) with ansible-vault"
 
