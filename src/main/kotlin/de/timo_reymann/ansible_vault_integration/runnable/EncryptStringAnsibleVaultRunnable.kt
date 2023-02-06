@@ -33,5 +33,5 @@ class EncryptStringAnsibleVaultRunnable(
     }
 
     override val successMessage: String
-        get() = "String vaulted and replaced"
+        get() = "String encrypted and replaced"
 }

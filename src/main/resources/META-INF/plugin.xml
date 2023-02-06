@@ -136,8 +136,8 @@
     <actions>
         <action id="de.timo_reymann.ansible_vault_integration.execution.action.action.menu.VaultFileMenuAction"
                 class="de.timo_reymann.ansible_vault_integration.intention.menu.VaultFileMenuAction"
-                text="Vault/Unvault File"
-                description="Encrypt/Decrypt the given file using ansible-vault">
+                text="Vault/Unvault File(s)"
+                description="Encrypt/Decrypt the given file(s) using ansible-vault">
             <add-to-group group-id="CutCopyPasteGroup" anchor="last"/>
         </action>
     </actions>
