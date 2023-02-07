@@ -1,13 +1,15 @@
 package de.timo_reymann.ansible_vault_integration.runnable
 
+import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
+
 enum class VaultRunnableType {
     ENCRYPT,
     DECRYPT;
 
     override fun toString(): String {
         return when (this) {
-            ENCRYPT -> "Vault"
-            DECRYPT -> "Unvault"
+            ENCRYPT -> AnsibleVaultIntegrationBundle.message("action.encrypt")
+            DECRYPT -> AnsibleVaultIntegrationBundle.message("action.decrypt")
         }
     }
 
@@ -45,5 +47,5 @@ interface AnsibleVaultRunnable {
     /**
      * Specifies if the action was run for entire file(s) or a single value
      */
-    val mode : VaultRunnableMode
+    val mode: VaultRunnableMode
 }

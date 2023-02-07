@@ -13,6 +13,7 @@ import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiFile
 import com.intellij.util.containers.stream
+import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
 import de.timo_reymann.ansible_vault_integration.commandline.AnsibleCommandLineTransformer
 import de.timo_reymann.ansible_vault_integration.commandline.AnsibleVaultCommandLineBuilder
 import de.timo_reymann.ansible_vault_integration.commandline.NoOpAnsibleCommandLineTransformer
@@ -57,7 +58,7 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
                     val stdoutLine = event.text.trim { it <= ' ' }
 
                     // Omit warnings
-                    if (stdoutLine.startsWith("WARNING:")) {
+                    if (stdoutLine.startsWith("WARNING") || stdoutLine.startsWith("DEPRECATION")) {
                         return
                     }
 
@@ -70,30 +71,48 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
                 }
             })
             processHandler.startNotify()
+
             // Error waiting for graceful exit
             if (!processHandler.waitFor(AnsibleVaultSettings.getInstance(project).state.timeout * 1000L)) {
                 processHandler.destroyProcess()
                 throw AnsibleVaultWrapperCallFailedException(
-                    "Command timed out: <pre>" + java.lang.String.join(
-                        "<br />",
+                    AnsibleVaultIntegrationBundle.message(
+                        "exception.AnsibleVaultWrapperCallFailedException.time_out",
                         stdout
-                    ) + "</pre>"
+                    )
                 )
             }
+
             if (processHandler.getExitCode() != null && processHandler.getExitCode() != 0) {
                 throw AnsibleVaultWrapperCallFailedException(
-                    "Exited with code " + processHandler.getExitCode() + ": " + java.lang.String.join(
-                        "<br />",
+                    AnsibleVaultIntegrationBundle.message(
+                        "exception.AnsibleVaultWrapperCallFailedException.exit_code",
+                        processHandler.getExitCode()!!,
                         stdout
                     )
                 )
             }
         } catch (e: ExecutionException) {
-            throw AnsibleVaultWrapperCallFailedException("Internal error: " + e.message)
+            throw AnsibleVaultWrapperCallFailedException(
+                AnsibleVaultIntegrationBundle.message(
+                    "exception.AnsibleVaultWrapperCallFailedException.internal_error",
+                    e.message ?: "No message available"
+                )
+            )
         } catch (e: NullPointerException) {
-            throw AnsibleVaultWrapperCallFailedException("Internal error: " + e.message)
+            throw AnsibleVaultWrapperCallFailedException(
+                AnsibleVaultIntegrationBundle.message(
+                    "exception.AnsibleVaultWrapperCallFailedException.internal_error",
+                    e.message ?: "No message available"
+                )
+            )
         } catch (e: IOException) {
-            throw AnsibleVaultWrapperCallFailedException("Internal error: " + e.message)
+            throw AnsibleVaultWrapperCallFailedException(
+                AnsibleVaultIntegrationBundle.message(
+                    "exception.AnsibleVaultWrapperCallFailedException.internal_error",
+                    e.message ?: "No message available"
+                )
+            )
         }
         return stdout.toString()
     }
@@ -115,8 +134,10 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
         val stdinFile = createTempFile(stdin)
         val ansibleCommandLineTransformer: AnsibleCommandLineTransformer = getCommandLineTransformer(vaultExecutable)
 
-        if(!File(vaultExecutable).exists()) {
-            throw AnsibleVaultWrapperCallFailedException("Executable configured could not be found")
+        if (!File(vaultExecutable).exists()) {
+            throw AnsibleVaultWrapperCallFailedException(
+                AnsibleVaultIntegrationBundle.getMessage("exception.AnsibleVaultWrapperCallFailedException.executable_not_found")
+            )
         }
 
         return AnsibleVaultCommandLineBuilder(vaultExecutable, ansibleCommandLineTransformer)
@@ -136,6 +157,7 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
         runsInWsl(vaultExecutable) -> WslAnsibleCommandLineTransformer(
             WslPath.parseWindowsUncPath(vaultExecutable)!!.distribution
         )
+
         else -> NoOpAnsibleCommandLineTransformer()
     }
 

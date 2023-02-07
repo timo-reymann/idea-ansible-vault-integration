@@ -4,6 +4,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.util.IncorrectOperationException
+import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
 import de.timo_reymann.ansible_vault_integration.config.AnsibleConfigurationService
 import de.timo_reymann.ansible_vault_integration.runnable.string.EncryptStringAnsibleVaultRunnable
 import org.jetbrains.yaml.YAMLTokenTypes
@@ -12,9 +13,7 @@ import org.jetbrains.yaml.psi.YAMLKeyValue
 /**
  * Vault Action to provide unvault for yaml files
  */
-class VaultIntentionAction : BaseIntentionAction("Vault ansible secret") {
-
-
+class VaultIntentionAction : BaseIntentionAction(AnsibleVaultIntegrationBundle.message("intention.vault.text")) {
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
         if (!super.isAvailable(project, editor, element)) {
             return false
@@ -55,5 +54,4 @@ class VaultIntentionAction : BaseIntentionAction("Vault ansible secret") {
             runTask(project, EncryptStringAnsibleVaultRunnable(project, containingFile, content, element))
         }
     }
-
 }

@@ -6,7 +6,9 @@ import com.intellij.openapi.options.ConfigurationException
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBTextField
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.builder.panel
+import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
 import org.jetbrains.annotations.Nls
 import java.io.File
 import javax.swing.JComponent
@@ -21,35 +23,39 @@ open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
     private val pluginSettings: AnsibleVaultSettings = AnsibleVaultSettings.getInstance(project)
 
     private val panel = panel {
-        row("Executable") {
+        row(AnsibleVaultIntegrationBundle.message("settings.executable_section.title")) {
             textFieldWithBrowseButton(
-                prop = pluginSettings::vaultExecutable,
-                browseDialogTitle = "Select ansible vault executable",
+                browseDialogTitle = AnsibleVaultIntegrationBundle.message("settings.executable_section.browse"),
                 fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFileOrExecutableAppDescriptor()
-            ).comment("Path to ansible vault executable or wrapper script")
+            ).comment(AnsibleVaultIntegrationBundle.message("settings.executable_section.comment"))
+                .bindText(pluginSettings::vaultExecutable)
                 .also { executableField = it.component }
         }
 
-        row("Command line arguments") {
-            textField(pluginSettings::vaultArguments)
-                .comment("Arguments to suffix to execution")
+        row(AnsibleVaultIntegrationBundle.message("settings.args_section.title")) {
+            textField()
+                .bindText(pluginSettings::vaultArguments)
+                .comment(AnsibleVaultIntegrationBundle.getMessage("settings.args_section.comment"))
                 .focused()
                 .also { argumentsField = it.component }
         }
 
         row("Execution Timeout") {
-            textField(
-                { pluginSettings.timeout.toString() },
-                { pluginSettings.timeout = it.tryParseInt() ?: return@textField }
-            )
+            textField()
+                .bindText(
+                    { pluginSettings.timeout.toString() },
+                    { pluginSettings.timeout = it.tryParseInt() ?: return@bindText }
+                )
                 .comment("Amount in seconds to wait before stopping execution forcefully")
                 .also { executionTimeoutField = it.component }
         }
-
-        noteRow("""
+        // TODO Migrate to v2
+        /*noteRow(
+            """
         You have a complex setup with different secrets for different maturities? - 
         <a href="https://plugins.jetbrains.com/plugin/14353-ansible-vault-integration/tutorials/vault-file-as-script">I got you covered!</a>
-        """.trimIndent())
+        """.trimIndent()
+        )*/
     }
 
     override fun getDisplayName(): @Nls String = "Ansible Vault"
@@ -58,12 +64,16 @@ open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
     override fun isModified(): Boolean = panel.isModified()
     override fun apply() {
         if (!File(executableField.text).exists()) {
-            throw ConfigurationException("Invalid vault executable")
+            throw ConfigurationException(
+                AnsibleVaultIntegrationBundle.message("settings.executable_section.validation.invalid_executable")
+            )
         }
 
         val timeout = executionTimeoutField.text.tryParseInt()
         if (timeout == null || timeout < 1) {
-            throw ConfigurationException("Invalid execution timeout, must be greater than 1")
+            throw ConfigurationException(
+                AnsibleVaultIntegrationBundle.message("settings.executable_section.validation.invalid_timeout")
+            )
         }
 
         panel.apply()

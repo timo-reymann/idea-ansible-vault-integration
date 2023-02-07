@@ -4,6 +4,7 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.util.ui.JBUI
+import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
 import de.timo_reymann.ansible_vault_integration.config.VaultIdentity
 import java.awt.Component
 import java.util.function.Consumer
@@ -15,7 +16,7 @@ import javax.swing.border.Border
 import javax.swing.border.EmptyBorder
 
 class AnsibleVaultIdentityPopup(
-    private val vaultIdentities: List<VaultIdentity>,
+    vaultIdentities: List<VaultIdentity>,
     private val callback: Consumer<VaultIdentity>
 ) {
     companion object {
@@ -24,8 +25,8 @@ class AnsibleVaultIdentityPopup(
 
     private val popup = JBPopupFactory.getInstance().createPopupChooserBuilder(vaultIdentities)
         .setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
-        .setAccessibleName("Use vault identity")
-        .setTitle("Use Vault Identity")
+        .setAccessibleName(AnsibleVaultIntegrationBundle.message("settings.vault_identity.accessible_name"))
+        .setTitle(AnsibleVaultIntegrationBundle.message("settings.vault_identity.title"))
         .setMovable(false)
         .setResizable(false)
         .setRequestFocus(true)

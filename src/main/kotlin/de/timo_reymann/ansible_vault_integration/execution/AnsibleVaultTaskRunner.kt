@@ -7,6 +7,7 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task.Backgroundable
 import com.intellij.openapi.project.Project
+import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
 import de.timo_reymann.ansible_vault_integration.runnable.AnsibleVaultRunnable
 import de.timo_reymann.ansible_vault_integration.runnable.VaultRunnableMode
 import de.timo_reymann.ansible_vault_integration.runnable.VaultRunnableType
@@ -36,11 +37,11 @@ class AnsibleVaultTaskRunner(
         }
         var notification: Notification? = null
         val actionsExecuted = toHtmList(
-            "Successful actions",
+            AnsibleVaultIntegrationBundle.getMessage("notification.multiple.heading.successful_actions"),
             succeeded.map { it.type.stringify(it.fileName) }
         )
         val actionsFailed = toHtmList(
-            "Failed actions",
+            AnsibleVaultIntegrationBundle.getMessage("notification.multiple.heading.failed_actions"),
             failed.map { "${it.first.type.stringify(it.first.fileName)}: <code>${it.second.message ?: "Unexpected error"}</code>" }
         )
 
@@ -49,7 +50,10 @@ class AnsibleVaultTaskRunner(
                 failed.size == 0 -> { // no failed tasks
                     notification = Notification(
                         NOTIFICATION_GROUP_ID,
-                        "Successfully processed ${succeeded.size} file${if (succeeded.size > 1) "s" else ""}",
+                        AnsibleVaultIntegrationBundle.message(
+                            "notification.multiple.title.success",
+                            succeeded.size
+                        ),
                         actionsExecuted,
                         NotificationType.INFORMATION
                     )
@@ -58,7 +62,11 @@ class AnsibleVaultTaskRunner(
                 failed.size > 0 && succeeded.size > 0 -> { // partially failed
                     notification = Notification(
                         NOTIFICATION_GROUP_ID,
-                        "Processed ${succeeded.size + failed.size} file${if ((succeeded.size + failed.size) > 1) "s" else ""} with ${failed.size} errors",
+                        AnsibleVaultIntegrationBundle.message(
+                            "notification.multiple.title.partial",
+                            succeeded.size + failed.size,
+                            failed.size
+                        ),
                         "$actionsExecuted\n<br />$actionsFailed",
                         NotificationType.WARNING
                     )
@@ -67,7 +75,10 @@ class AnsibleVaultTaskRunner(
                 else -> { // all failed
                     notification = Notification(
                         NOTIFICATION_GROUP_ID,
-                        "Failed to process ${failed.size} file${if ((succeeded.size + failed.size) > 1) "s" else ""}",
+                        AnsibleVaultIntegrationBundle.message(
+                            "notification.multiple.title.failure",
+                            failed.size
+                        ),
                         actionsFailed,
                         NotificationType.WARNING
                     )
@@ -78,7 +89,11 @@ class AnsibleVaultTaskRunner(
                 failed.size == 1 -> {
                     notification = Notification(
                         NOTIFICATION_GROUP_ID,
-                        "${failed[0].first.type} failed for ${failed[0].first.fileName}",
+                        AnsibleVaultIntegrationBundle.message(
+                            "notifications.single.title.failure",
+                            failed[0].first.type,
+                            failed[0].first.fileName
+                        ),
                         failed[0].second.message ?: "Unknown error",
                         NotificationType.ERROR
                     )
@@ -89,8 +104,14 @@ class AnsibleVaultTaskRunner(
 
                     notification = Notification(
                         NOTIFICATION_GROUP_ID,
-                        "${succeeded[0].type} succeeded for ${succeeded[0].fileName}",
-                        if (isInline && succeeded[0].type == VaultRunnableType.DECRYPT) "Copied decrypted value to clipboard" else "",
+                        AnsibleVaultIntegrationBundle.message(
+                            "notifications.single.title.success",
+                            succeeded[0].type,
+                            succeeded[0].fileName
+                        ),
+                        if (isInline && succeeded[0].type == VaultRunnableType.DECRYPT) AnsibleVaultIntegrationBundle.message(
+                            "notifications.single.body.clipboard"
+                        ) else "",
                         NotificationType.INFORMATION
                     )
                 }
@@ -104,7 +125,7 @@ class AnsibleVaultTaskRunner(
 
     private fun toHtmList(title: String, items: List<String>): String {
         return """
-            <p>Check the entire message for a more detailed report.</p>
+            <p>${AnsibleVaultIntegrationBundle.message("notifications.multiple.report_teaser")}</p>
             <br />
             <strong>${title}</strong>
             <ul>
@@ -114,16 +135,11 @@ class AnsibleVaultTaskRunner(
     }
 
     private fun runTask(indicator: ProgressIndicator, task: AnsibleVaultRunnable) {
-        val action = if (task.type == VaultRunnableType.DECRYPT) "Unvault" else "Vault"
-        indicator.text = "$action ${task.fileName} using ansible-vault"
+        indicator.text = "${task.type} ${task.fileName} using ansible-vault"
         task.run()
     }
 
     companion object {
-        private val log = Logger.getInstance(AnsibleVaultTaskRunner::class.java)
-
         val NOTIFICATION_GROUP_ID: String = AnsibleVaultTaskRunner::class.java.canonicalName
-        const val NOTIFICATION_ERROR_ID = "Error"
-        const val NOTIFICATION_SUCCESS_ID = "Success"
     }
 }
