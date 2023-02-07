@@ -13,14 +13,18 @@ import org.jetbrains.annotations.Nls
 /**
  * Background task abstraction for executing ansible vault operations
  */
-class AnsibleVaultTask(
+class AnsibleVaultTaskRunner(
     project: Project?,
     title: @Nls(capitalization = Nls.Capitalization.Sentence) String,
-    private val task: AnsibleVaultRunnable
+    private val tasks: List<AnsibleVaultRunnable>
 ) : Backgroundable(project, title) {
     override fun run(indicator: ProgressIndicator) {
         indicator.isIndeterminate = true
         indicator.text = this.title
+        tasks.forEach { runTask(indicator, it) }
+    }
+
+    private fun runTask(indicator : ProgressIndicator, task : AnsibleVaultRunnable) {
         var notification: Notification
         try {
             task.run()
@@ -44,9 +48,9 @@ class AnsibleVaultTask(
     }
 
     companion object {
-        private val log = Logger.getInstance(AnsibleVaultTask::class.java)
+        private val log = Logger.getInstance(AnsibleVaultTaskRunner::class.java)
 
-        val NOTIFICATION_GROUP_ID: String = AnsibleVaultTask::class.java.canonicalName
+        val NOTIFICATION_GROUP_ID: String = AnsibleVaultTaskRunner::class.java.canonicalName
         const val NOTIFICATION_ERROR_ID = "Error"
         const val NOTIFICATION_SUCCESS_ID = "Success"
     }

@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import de.timo_reymann.ansible_vault_integration.execution.AnsibleVaultTask
+import de.timo_reymann.ansible_vault_integration.execution.AnsibleVaultTaskRunner
 import de.timo_reymann.ansible_vault_integration.runnable.AnsibleVaultRunnable
 import org.jetbrains.annotations.Nls
 import org.jetbrains.yaml.YAMLLanguage
@@ -22,6 +22,6 @@ abstract class BaseIntentionAction(private val uiText: String) : PsiElementBaseI
 
     protected fun runTask(project: Project, runnable: AnsibleVaultRunnable) {
             ProgressManager.getInstance()
-                .run(AnsibleVaultTask(project, text, runnable))
+                .run(AnsibleVaultTaskRunner(project, text, listOf(runnable)))
     }
 }

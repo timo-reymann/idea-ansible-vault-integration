@@ -11,7 +11,7 @@ repositories {
 plugins {
     id("java")
     kotlin("jvm") version "1.7.10"
-    id("org.jetbrains.intellij") version "1.9.0"
+    id("org.jetbrains.intellij") version "1.10.0"
     id("com.palantir.git-version") version "0.15.0"
     id("com.adarshr.test-logger") version "3.0.0"
 }
@@ -35,12 +35,12 @@ intellij {
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+        kotlinOptions.jvmTarget = "17"
     }
 
     compileJava {
-        sourceCompatibility = JavaVersion.VERSION_1_8.toString()
-        targetCompatibility = JavaVersion.VERSION_1_8.toString()
+        sourceCompatibility = JavaVersion.VERSION_17.toString()
+        targetCompatibility = JavaVersion.VERSION_17.toString()
     }
 
     test {
