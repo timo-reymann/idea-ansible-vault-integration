@@ -8,6 +8,7 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
 import org.jetbrains.annotations.Nls
 import java.io.File
@@ -27,7 +28,9 @@ open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
             textFieldWithBrowseButton(
                 browseDialogTitle = AnsibleVaultIntegrationBundle.message("settings.executable_section.browse"),
                 fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFileOrExecutableAppDescriptor()
-            ).comment(AnsibleVaultIntegrationBundle.message("settings.executable_section.comment"))
+            )
+                .comment(AnsibleVaultIntegrationBundle.message("settings.executable_section.comment"))
+                .horizontalAlign(HorizontalAlign.FILL)
                 .bindText(pluginSettings::vaultExecutable)
                 .also { executableField = it.component }
         }
@@ -36,6 +39,7 @@ open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
             textField()
                 .bindText(pluginSettings::vaultArguments)
                 .comment(AnsibleVaultIntegrationBundle.getMessage("settings.args_section.comment"))
+                .horizontalAlign(HorizontalAlign.FILL)
                 .focused()
                 .also { argumentsField = it.component }
         }
@@ -47,19 +51,22 @@ open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
                     { pluginSettings.timeout = it.tryParseInt() ?: return@bindText }
                 )
                 .comment("Amount in seconds to wait before stopping execution forcefully")
+                .horizontalAlign(HorizontalAlign.FILL)
                 .also { executionTimeoutField = it.component }
         }
-        // TODO Migrate to v2
-        /*noteRow(
-            """
+        row {
+            text(
+                """
         You have a complex setup with different secrets for different maturities? - 
         <a href="https://plugins.jetbrains.com/plugin/14353-ansible-vault-integration/tutorials/vault-file-as-script">I got you covered!</a>
         """.trimIndent()
-        )*/
+            )
+        }
+
     }
 
-    override fun getDisplayName(): @Nls String = "Ansible Vault"
-    override fun getHelpTopic(): String = "Configure Ansible vault"
+    override fun getDisplayName(): @Nls String =  AnsibleVaultIntegrationBundle.message("settings.display_name")
+    override fun getHelpTopic(): String = AnsibleVaultIntegrationBundle.message("settings.help_topic")
     override fun createComponent(): JComponent = panel
     override fun isModified(): Boolean = panel.isModified()
     override fun apply() {

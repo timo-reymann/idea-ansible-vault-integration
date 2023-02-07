@@ -13,6 +13,15 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>3.2.0
+                <ul>
+                    <li>Add support for binary files (<a href="https://github.com/timo-reymann/idea-ansible-vault-integration/issues/51">#51</a>)</li>
+                    <li>Notifications are now grouped together and provide even better output of errors and what has been done</li>
+                    <li>Use v2 Kotlin DSL for Settings UI to make sure it works smooth in newer versions of IntelliJ</li>
+                    <li>Plugin now requires IntelliJ platform 2022.3+</li>
+                    <li>Improve performance for vault file check by only reading first bytes instead of traversing PSI</li>
+                </ul>
+            </li>
             <li>3.1.0
                 <ul>
                     <li>
@@ -118,7 +127,7 @@
         ]]></change-notes>
 
     <!-- Dependencies -->
-    <idea-version since-build="211.7442.40"/>
+    <idea-version since-build="222.4345.14"/>
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends>com.intellij.modules.platform</depends>
 
