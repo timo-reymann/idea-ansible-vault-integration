@@ -127,7 +127,7 @@
         ]]></change-notes>
 
     <!-- Dependencies -->
-    <idea-version since-build="222.4345.14"/>
+    <idea-version since-build="223.8617.56"/>
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends>com.intellij.modules.platform</depends>
 
