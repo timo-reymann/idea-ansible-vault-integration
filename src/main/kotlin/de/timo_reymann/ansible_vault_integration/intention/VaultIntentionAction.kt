@@ -50,7 +50,7 @@ class VaultIntentionAction : BaseIntentionAction("Vault ansible secret") {
             .getAggregatedConfig()
             .vaultIdentities
 
-        if (vaultIdentities != null && vaultIdentities.isNotEmpty()) {
+        if (!vaultIdentities.isNullOrEmpty()) {
             AnsibleVaultIdentityPopup(vaultIdentities) {
                 runTask(project, EncryptStringAnsibleVaultRunnable(project, containingFile, content, element, it))
             }.showInEditor(editor)
