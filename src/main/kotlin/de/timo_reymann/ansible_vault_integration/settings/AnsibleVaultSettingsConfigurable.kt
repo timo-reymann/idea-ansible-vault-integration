@@ -6,8 +6,7 @@ import com.intellij.openapi.options.ConfigurationException
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBTextField
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
 import org.jetbrains.annotations.Nls
@@ -39,7 +38,7 @@ open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
             textField()
                 .bindText(pluginSettings::vaultArguments)
                 .comment(AnsibleVaultIntegrationBundle.getMessage("settings.args_section.comment"))
-                .horizontalAlign(HorizontalAlign.FILL)
+                .align(Align.FILL)
                 .focused()
                 .also { argumentsField = it.component }
         }
