@@ -29,7 +29,7 @@ open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
                 fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFileOrExecutableAppDescriptor()
             )
                 .comment(AnsibleVaultIntegrationBundle.message("settings.executable_section.comment"))
-                .horizontalAlign(HorizontalAlign.FILL)
+                .align(Align.FILL)
                 .bindText(pluginSettings::vaultExecutable)
                 .also { executableField = it.component }
         }
@@ -50,7 +50,7 @@ open class AnsibleVaultSettingsConfigurable(project: Project) : Configurable {
                     { pluginSettings.timeout = it.tryParseInt() ?: return@bindText }
                 )
                 .comment("Amount in seconds to wait before stopping execution forcefully")
-                .horizontalAlign(HorizontalAlign.FILL)
+                .align(Align.FILL)
                 .also { executionTimeoutField = it.component }
         }
         row {
