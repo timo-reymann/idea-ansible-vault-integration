@@ -1,14 +1,11 @@
 package de.timo_reymann.ansible_vault_integration.intention
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.psi.PsiElement
 import com.intellij.util.IncorrectOperationException
-import com.intellij.util.ui.JBUI
 import de.timo_reymann.ansible_vault_integration.config.AnsibleConfigurationService
-import de.timo_reymann.ansible_vault_integration.runnable.EncryptStringAnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.runnable.string.EncryptStringAnsibleVaultRunnable
 import org.jetbrains.yaml.YAMLTokenTypes
 import org.jetbrains.yaml.psi.YAMLKeyValue
 

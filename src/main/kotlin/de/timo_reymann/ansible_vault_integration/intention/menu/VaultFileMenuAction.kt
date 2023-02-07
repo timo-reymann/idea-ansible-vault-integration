@@ -1,13 +1,9 @@
 package de.timo_reymann.ansible_vault_integration.intention.menu
 
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.LangDataKeys
 import com.intellij.openapi.progress.ProgressManager
-import com.intellij.psi.PsiBinaryFile
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import de.timo_reymann.ansible_vault_integration.config.AnsibleConfigurationService
@@ -15,10 +11,9 @@ import de.timo_reymann.ansible_vault_integration.config.VaultIdentity
 import de.timo_reymann.ansible_vault_integration.execution.AnsibleVaultTaskRunner
 import de.timo_reymann.ansible_vault_integration.intention.AnsibleVaultIdentityPopup
 import de.timo_reymann.ansible_vault_integration.runnable.AnsibleVaultRunnable
-import de.timo_reymann.ansible_vault_integration.runnable.DecryptFileAnsibleVaultRunnable
-import de.timo_reymann.ansible_vault_integration.runnable.EncryptFileAnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.runnable.file.DecryptFileAnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.runnable.file.EncryptFileAnsibleVaultRunnable
 import kotlinx.coroutines.runBlocking
-import org.apache.commons.io.FileUtils
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

@@ -4,7 +4,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.util.IncorrectOperationException
-import de.timo_reymann.ansible_vault_integration.runnable.DecryptStringAnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.runnable.string.DecryptStringAnsibleVaultRunnable
 import de.timo_reymann.ansible_vault_integration.util.AnsibleVaultedStringUtil
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.YAMLTokenTypes

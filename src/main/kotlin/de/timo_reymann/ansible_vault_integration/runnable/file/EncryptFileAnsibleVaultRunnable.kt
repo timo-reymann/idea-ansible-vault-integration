@@ -1,11 +1,12 @@
-package de.timo_reymann.ansible_vault_integration.runnable
+package de.timo_reymann.ansible_vault_integration.runnable.file
 
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.openapi.fileEditor.FileDocumentManager
-import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiFile
 import de.timo_reymann.ansible_vault_integration.config.VaultIdentity
 import de.timo_reymann.ansible_vault_integration.execution.action.AnsibleVaultEncryptAction
+import de.timo_reymann.ansible_vault_integration.runnable.AnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.runnable.VaultRunnableMode
+import de.timo_reymann.ansible_vault_integration.runnable.VaultRunnableType
 
 class EncryptFileAnsibleVaultRunnable(
     private val containingFile: PsiFile,
@@ -27,6 +28,10 @@ class EncryptFileAnsibleVaultRunnable(
         }
     }
 
-    override val successMessage: String
-        get() = "${containingFile.name} vaulted successfully"
+    override val fileName: String
+        get() = containingFile.name
+    override val type: VaultRunnableType
+        get() = VaultRunnableType.ENCRYPT
+    override val mode: VaultRunnableMode
+        get() = VaultRunnableMode.FILE
 }
