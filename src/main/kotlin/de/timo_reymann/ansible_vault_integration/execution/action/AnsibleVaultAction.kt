@@ -93,29 +93,21 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
                 )
             }
         } catch (e: ExecutionException) {
-            throw AnsibleVaultWrapperCallFailedException(
-                AnsibleVaultIntegrationBundle.message(
-                    "exception.AnsibleVaultWrapperCallFailedException.internal_error",
-                    e.message ?: "No message available"
-                )
-            )
+            wrapException(e)
         } catch (e: NullPointerException) {
-            throw AnsibleVaultWrapperCallFailedException(
-                AnsibleVaultIntegrationBundle.message(
-                    "exception.AnsibleVaultWrapperCallFailedException.internal_error",
-                    e.message ?: "No message available"
-                )
-            )
+            wrapException(e)
         } catch (e: IOException) {
-            throw AnsibleVaultWrapperCallFailedException(
-                AnsibleVaultIntegrationBundle.message(
-                    "exception.AnsibleVaultWrapperCallFailedException.internal_error",
-                    e.message ?: "No message available"
-                )
-            )
+            wrapException(e)
         }
         return stdout.toString()
     }
+
+    private fun wrapException(e : Exception) : Any = throw AnsibleVaultWrapperCallFailedException(
+        AnsibleVaultIntegrationBundle.message(
+            "exception.AnsibleVaultWrapperCallFailedException.internal_error",
+            e.message ?: "No message available"
+        )
+    )
 
     private fun runsInWsl(vaultExecutable: String): Boolean =
         SystemInfo.isWin10OrNewer && WslPath.parseWindowsUncPath(vaultExecutable) != null
