@@ -4,7 +4,8 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.util.IncorrectOperationException
-import de.timo_reymann.ansible_vault_integration.runnable.DecryptStringAnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.bundle.AnsibleVaultIntegrationBundle
+import de.timo_reymann.ansible_vault_integration.runnable.string.DecryptStringAnsibleVaultRunnable
 import de.timo_reymann.ansible_vault_integration.util.AnsibleVaultedStringUtil
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.YAMLTokenTypes
@@ -12,7 +13,7 @@ import org.jetbrains.yaml.YAMLTokenTypes
 /**
  * Unvault Action to provide unvault for yaml files
  */
-class UnvaultIntentionAction : BaseIntentionAction("Unvault ansible secret") {
+class UnvaultIntentionAction : BaseIntentionAction(AnsibleVaultIntegrationBundle.message("intention.unvault.text")) {
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
         if (!super.isAvailable(project, editor, element)) {
             return false
@@ -43,6 +44,7 @@ class UnvaultIntentionAction : BaseIntentionAction("Unvault ansible secret") {
                 // <tag>:<space><text>
                 element.nextSibling.nextSibling.nextSibling.node.text
             }
+
             else -> {
                 // <tag>:<space><text>
                 null

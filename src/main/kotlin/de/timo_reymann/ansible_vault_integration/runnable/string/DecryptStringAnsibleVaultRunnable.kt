@@ -1,4 +1,4 @@
-package de.timo_reymann.ansible_vault_integration.runnable
+package de.timo_reymann.ansible_vault_integration.runnable.string
 
 import com.intellij.ide.ClipboardSynchronizer
 import com.intellij.ide.CopyPasteManagerEx
@@ -6,6 +6,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.util.ui.TextTransferable
 import de.timo_reymann.ansible_vault_integration.execution.action.AnsibleVaultDecryptAction
+import de.timo_reymann.ansible_vault_integration.runnable.AnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.runnable.VaultRunnableMode
+import de.timo_reymann.ansible_vault_integration.runnable.VaultRunnableType
 
 class DecryptStringAnsibleVaultRunnable(
     private val project: Project,
@@ -20,6 +23,10 @@ class DecryptStringAnsibleVaultRunnable(
             .setContent(TextTransferable(decrypted, decrypted), CopyPasteManagerEx.getInstanceEx())
     }
 
-    override val successMessage: String
-        get() = "Decrypted secret has been copied to your clipboard"
+    override val fileName: String
+        get() = containingFile.name
+    override val type: VaultRunnableType
+        get() = VaultRunnableType.DECRYPT
+    override val mode: VaultRunnableMode
+        get() = VaultRunnableMode.INLINE
 }

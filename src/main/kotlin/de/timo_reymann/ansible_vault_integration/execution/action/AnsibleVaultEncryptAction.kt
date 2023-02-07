@@ -9,7 +9,7 @@ import de.timo_reymann.ansible_vault_integration.config.VaultIdentity
 open class AnsibleVaultEncryptAction(
     project: Project,
     contextFile: PsiFile,
-    override val stdin: String,
+    override val stdin: ByteArray,
     private val vaultIdentity: VaultIdentity?,
     private val addPrefix: Boolean = true
 ) : AnsibleVaultAction(project, contextFile) {

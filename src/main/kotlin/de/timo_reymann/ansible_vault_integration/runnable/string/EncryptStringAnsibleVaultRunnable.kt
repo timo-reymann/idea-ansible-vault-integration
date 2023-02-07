@@ -1,4 +1,4 @@
-package de.timo_reymann.ansible_vault_integration.runnable
+package de.timo_reymann.ansible_vault_integration.runnable.string
 
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
@@ -6,6 +6,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import de.timo_reymann.ansible_vault_integration.config.VaultIdentity
 import de.timo_reymann.ansible_vault_integration.execution.action.AnsibleVaultEncryptAction
+import de.timo_reymann.ansible_vault_integration.runnable.AnsibleVaultRunnable
+import de.timo_reymann.ansible_vault_integration.runnable.VaultRunnableMode
+import de.timo_reymann.ansible_vault_integration.runnable.VaultRunnableType
 import org.jetbrains.yaml.YAMLElementGenerator
 
 class EncryptStringAnsibleVaultRunnable(
@@ -17,7 +20,7 @@ class EncryptStringAnsibleVaultRunnable(
 ) : AnsibleVaultRunnable {
     @Throws(Exception::class)
     override fun run() {
-        val encrypted = AnsibleVaultEncryptAction(project, containingFile, content, vaultIdentity)
+        val encrypted = AnsibleVaultEncryptAction(project, containingFile, content.toByteArray(), vaultIdentity)
             .execute()
         WriteCommandAction.runWriteCommandAction(project) {
             val generatedReplacement =
@@ -32,6 +35,10 @@ class EncryptStringAnsibleVaultRunnable(
         }
     }
 
-    override val successMessage: String
-        get() = "String encrypted and replaced"
+    override val fileName: String
+        get() = containingFile.name
+    override val type: VaultRunnableType
+        get() = VaultRunnableType.ENCRYPT
+    override val mode: VaultRunnableMode
+        get() = VaultRunnableMode.INLINE
 }
