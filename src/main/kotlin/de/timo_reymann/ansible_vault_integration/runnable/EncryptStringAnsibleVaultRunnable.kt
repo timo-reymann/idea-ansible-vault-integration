@@ -17,7 +17,7 @@ class EncryptStringAnsibleVaultRunnable(
 ) : AnsibleVaultRunnable {
     @Throws(Exception::class)
     override fun run() {
-        val encrypted = AnsibleVaultEncryptAction(project, containingFile, content, vaultIdentity)
+        val encrypted = AnsibleVaultEncryptAction(project, containingFile, content.toByteArray(), vaultIdentity)
             .execute()
         WriteCommandAction.runWriteCommandAction(project) {
             val generatedReplacement =

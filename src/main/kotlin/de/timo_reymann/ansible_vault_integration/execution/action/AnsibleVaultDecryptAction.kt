@@ -12,8 +12,8 @@ open class AnsibleVaultDecryptAction(
     override val actionName: String
         get() = "decrypt"
 
-    override val stdin: String
-        get() = AnsibleVaultedStringUtil.removePrefix(encrypted)
+    override val stdin: ByteArray
+        get() = AnsibleVaultedStringUtil.removePrefix(encrypted).toByteArray()
 
     override val parameters: List<String>
         get() = listOf("--output=-")

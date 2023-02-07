@@ -21,7 +21,9 @@ class AnsibleVaultTaskRunner(
     override fun run(indicator: ProgressIndicator) {
         indicator.isIndeterminate = true
         indicator.text = this.title
-        tasks.forEach { runTask(indicator, it) }
+        tasks.forEach {
+            runTask(indicator, it)
+        }
     }
 
     private fun runTask(indicator : ProgressIndicator, task : AnsibleVaultRunnable) {

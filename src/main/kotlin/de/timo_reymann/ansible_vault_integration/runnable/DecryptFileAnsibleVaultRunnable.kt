@@ -14,15 +14,14 @@ class DecryptFileAnsibleVaultRunnable(
         val decrypted = AnsibleVaultDecryptAction(
             containingFile.project,
             containingFile,
-            AnsibleVaultedStringUtil.addPrefix(containingFile.text)
+            AnsibleVaultedStringUtil.addPrefix(String(containingFile.virtualFile.contentsToByteArray()))
         ).execute()
 
         WriteCommandAction.runWriteCommandAction(containingFile.project) {
-            FileDocumentManager.getInstance()
-                .getDocument(containingFile.virtualFile)?.setText(decrypted)
+            containingFile.virtualFile.setBinaryContent(decrypted.toByteArray())
         }
     }
 
     override val successMessage: String
-        get() = "File is decrypted"
+        get() = "${containingFile.name} unvaulted successfully"
 }

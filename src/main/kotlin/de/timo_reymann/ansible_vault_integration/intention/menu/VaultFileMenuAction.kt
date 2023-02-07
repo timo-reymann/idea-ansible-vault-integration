@@ -18,6 +18,7 @@ import de.timo_reymann.ansible_vault_integration.runnable.AnsibleVaultRunnable
 import de.timo_reymann.ansible_vault_integration.runnable.DecryptFileAnsibleVaultRunnable
 import de.timo_reymann.ansible_vault_integration.runnable.EncryptFileAnsibleVaultRunnable
 import kotlinx.coroutines.runBlocking
+import org.apache.commons.io.FileUtils
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -34,9 +35,7 @@ open class VaultFileMenuAction : AnAction() {
                 val psiFile = psiManager.findFile(it) ?: return@forEach
 
                 val runnable = createFileRunnable(vaultIdentities, psiFile)
-                if (runnable != null) {
-                    runnables += runnable
-                }
+                runnables += runnable
             }
 
             progressManager.run(
@@ -52,25 +51,12 @@ open class VaultFileMenuAction : AnAction() {
     private suspend fun createFileRunnable(
         vaultIdentities: List<VaultIdentity>?,
         psiFile: PsiFile
-    ): AnsibleVaultRunnable? {
-        if (psiFile is PsiBinaryFile) {
-            Notifications.Bus.notify(
-                Notification(
-                    VaultFileMenuAction::class.java.canonicalName,
-                    NOTIFICATION_ERROR_TITLE,
-                    NOTIFICATION_BINARIES_NOT_SUPPORTED,
-                    NotificationType.ERROR
-                )
-            )
-
-            return null
+    ): AnsibleVaultRunnable {
+        val buffer = ByteArray(14)
+        psiFile.virtualFile.inputStream.use {
+            it.read(buffer)
         }
-
-        if (psiFile.text.isNullOrEmpty()) {
-            return null
-        }
-
-        val fileIsEncrypted = psiFile.text.startsWith("\$ANSIBLE_VAULT")
+        val fileIsEncrypted = String(buffer) == "\$ANSIBLE_VAULT"
 
         return if (fileIsEncrypted) {
             DecryptFileAnsibleVaultRunnable(psiFile)
@@ -85,11 +71,6 @@ open class VaultFileMenuAction : AnAction() {
                 EncryptFileAnsibleVaultRunnable(psiFile, null, false)
             }
         }
-    }
-
-    companion object {
-        const val NOTIFICATION_ERROR_TITLE = "Error"
-        const val NOTIFICATION_BINARIES_NOT_SUPPORTED = "Vaulting binary files not supported yet."
     }
 }
 

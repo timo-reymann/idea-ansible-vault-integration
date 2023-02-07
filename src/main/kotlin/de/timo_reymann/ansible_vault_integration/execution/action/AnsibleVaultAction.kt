@@ -28,11 +28,11 @@ import java.util.stream.Collectors
 abstract class AnsibleVaultAction(protected val project: Project, protected val contextFile: PsiFile) {
 
     protected abstract val actionName: String
-    protected abstract val stdin: String
+    protected abstract val stdin: ByteArray
     protected abstract val parameters: List<String>
 
     @Throws(IOException::class)
-    protected fun createTempFile(input: String?): File {
+    protected fun createTempFile(input: ByteArray): File {
         val tempFile = FileUtil.createTempFile("vault", "tmp")
         FileUtil.writeToFile(tempFile, input!!)
         return tempFile
@@ -107,7 +107,7 @@ abstract class AnsibleVaultAction(protected val project: Project, protected val 
         contextPath: Path,
         action: String,
         parameters: List<String>,
-        stdin: String
+        stdin: ByteArray
     ): GeneralCommandLine {
         val state = AnsibleVaultSettings.getInstance(project).state
         val vaultExecutable = state.vaultExecutable
