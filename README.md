@@ -11,14 +11,12 @@ Ansible Vault Integration
 
 <p align="center">
 	<img width="300" src="./src/main/resources/META-INF/pluginIcon.svg">
-</p>
-
-<p align="center">
+    <br />
 	Integrate the ansible vault directly into IntelliJ IDEA with context actions for vaulting and unvaulting secrets. This
 	makes working with ansible-vault a breeze!
 </p>
 
-## Whats in the box?
+## Features
 
 ### Vaulting secrets
 
@@ -28,6 +26,15 @@ Vault any text from within your yaml file, just hint ``Alt+Enter`` -> ``Vault an
 
 Unvaulting is as easy as placing your cursor in the secret, hitting ``Alt+Enter`` -> ``Unvault ansible secret`` and you
 are done!
+
+## Requirements
+- IDEA-based IDE compatible with the plugin
+
+## Installation
+1. Press (Ctrl+Alt+S/⌘/) to open the IDE settings and select Plugins.
+2. Search for `MJML Support` in the Marketplace and click Install.
+
+## Usage
 
 ### Configure ansible-vault call
 
@@ -122,14 +129,35 @@ case "$IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY" in
 esac
 ```
 
-## Why?
-
+## Motivation
 Ansible is great, but the ansible-vault is a piece of junk to use for passwords to encrypt and decrypt.
 
-## How can I use it?
+## Contributing
+I love your input! I want to make contributing to this project as easy and transparent as possible, whether it's:
 
-1. Install it from the plugin repository
-2. Restart your IDE
-3. Load your ansible project
-4. Change your configuration for the project if necessary (custom ansible-vault, arguments)
-5. You are done, enjoy the magic!
+- Reporting a bug
+- Discussing the current state of the configuration
+- Submitting a fix
+- Proposing new features
+- Becoming a maintainer
+
+To get started please read the [Contribution Guidelines](./CONTRIBUTING.md).
+
+## Development
+
+### Requirements
+- [Java](https://openjdk.org/)
+
+### Test
+```shell
+# To run unit tests
+./gradlew test
+
+# To run plugin verifier to check compability
+./gradlew runPluginVerifier
+```
+
+### Build
+```shell
+./gradlew buildPlugin
+```
