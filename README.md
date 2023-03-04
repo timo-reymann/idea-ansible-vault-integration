@@ -94,7 +94,7 @@ Cli args:
 Create the file `.idea-get-vault-password.sh` (0700):
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Helper to show error message
 __error_message() {
