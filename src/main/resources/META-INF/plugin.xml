@@ -149,6 +149,7 @@
         <!-- Configuration -->
         <projectConfigurable id="de.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"
                              groupId="tools"
+                             key="settings.display_name"
                              instance="de.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettingsConfigurable"/>
         <projectService
                 serviceImplementation="de.timo_reymann.ansible_vault_integration.settings.AnsibleVaultSettings"/>
@@ -163,4 +164,5 @@
             <add-to-group group-id="CutCopyPasteGroup" anchor="last"/>
         </action>
     </actions>
+    <resource-bundle>messages.AnsibleVaultIntegrationBundle</resource-bundle>
 </idea-plugin>
