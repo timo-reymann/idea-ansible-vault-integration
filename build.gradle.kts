@@ -19,7 +19,7 @@ plugins {
 dependencies {
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test"))
-    testImplementation("junit", "junit", "4.12")
+    testImplementation("junit", "junit", "4.13.2")
     implementation("org.ini4j", "ini4j", "0.5.4")
 }
 
