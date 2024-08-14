@@ -5,9 +5,10 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.wsl.WSLCommandLineOptions
 import com.intellij.execution.wsl.WSLDistribution
 import com.intellij.openapi.project.Project
+import java.nio.file.Path
 
 class WslAnsibleCommandLineTransformer(private val distribution: WSLDistribution) : AnsibleCommandLineTransformer {
-    override fun transformFileName(input: String?): String? = distribution.getWslPath(input!!)
+    override fun transformFileName(input: String?): String? = distribution.getWslPath(Path.of(input!!))
 
     override fun transformCommandLine(project: Project, commandLine: GeneralCommandLine): GeneralCommandLine? {
         val wslCommandLineOptions = WSLCommandLineOptions()

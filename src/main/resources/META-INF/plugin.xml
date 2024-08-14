@@ -13,6 +13,11 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>3.3.0
+                <ul>
+                    <li>Replace deprecated WSL Path API call</li>
+                </ul>
+            </li>
             <li>3.2.1
                 <ul>
                     <li>Migrate align for text fields to Kotlin DSL v2</li>
