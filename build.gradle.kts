@@ -1,4 +1,5 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+
 fun getVersionDetails(): com.palantir.gradle.gitversion.VersionDetails =
     (extra["versionDetails"] as groovy.lang.Closure<*>)() as com.palantir.gradle.gitversion.VersionDetails
 
@@ -43,6 +44,10 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         name = "Ansible Vault Integration"
+
+        ideaVersion {
+            untilBuild = provider { null }
+        }
     }
 
     pluginVerification {
