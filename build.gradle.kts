@@ -1,3 +1,4 @@
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 fun getVersionDetails(): com.palantir.gradle.gitversion.VersionDetails =
     (extra["versionDetails"] as groovy.lang.Closure<*>)() as com.palantir.gradle.gitversion.VersionDetails
 
@@ -6,12 +7,15 @@ version = gitInfo.version
 
 repositories {
     mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
 plugins {
     id("java")
     kotlin("jvm") version "2.0.10"
-    id("org.jetbrains.intellij") version "1.17.4"
+    id("org.jetbrains.intellij.platform") version "2.0.1"
     id("com.palantir.git-version") version "3.0.0"
     id("com.adarshr.test-logger") version "4.0.0"
 }
@@ -21,28 +25,42 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("junit", "junit", "4.13.2")
     implementation("org.ini4j", "ini4j", "0.5.4")
+
+    intellijPlatform {
+        intellijIdeaUltimate(providers.gradleProperty("idea-version"))
+        pluginVerifier()
+        zipSigner()
+        instrumentationTools()
+        bundledPlugins(
+            listOf(
+                "org.jetbrains.plugins.yaml",
+            )
+        )
+        testFramework(TestFrameworkType.Platform)
+    }
 }
 
-intellij {
-    version.set(properties["idea-version"] as String)
-    pluginName.set("Ansible Vault Integration")
-    updateSinceUntilBuild.set(false)
-    downloadSources.set(true)
-    plugins.set(
-        listOf("yaml")
-    )
+intellijPlatform {
+    pluginConfiguration {
+        name = "Ansible Vault Integration"
+    }
+
+    pluginVerification {
+        ides {
+            recommended()
+        }
+    }
+
+    publishing {
+        token = System.getenv("JB_TOKEN")
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "17"
-    }
-
-    compileJava {
-        sourceCompatibility = JavaVersion.VERSION_17.toString()
-        targetCompatibility = JavaVersion.VERSION_17.toString()
-    }
-
     test {
         testLogging {
             exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
@@ -52,48 +70,5 @@ tasks {
 
         // Prevent "File access outside allowed roots" in multi module tests, because modules each have an .iml
         environment("NO_FS_ROOTS_ACCESS_CHECK", "1")
-    }
-
-    patchPluginXml {
-        setVersion(project.version)
-    }
-
-    publishPlugin {
-        dependsOn("patchPluginXml")
-        token.set(System.getenv("JB_TOKEN"))
-    }
-
-    runPluginVerifier {
-        ideVersions.set(
-            // Top 3 used IDEs with latest 5 versions
-            // Generated with https://github.com/timo-reymann/script-shelve/blob/master/jetbrains/query_ide_versions_for_verifier.py
-            listOf(
-                // PY - PyCharm Professional
-                "PCP-223.8617.48", // 2022.3.2
-                "PCP-223.8214.51", // 2022.3.1
-                "PCP-223.7571.203", // 2022.3
-                "PCP-222.4459.20", // 2022.2.4
-                "PCP-222.4345.23", // 2022.2.3
-
-                // IU - IntelliJ IDEA Ultimate
-                "IU-223.8617.56", // 2022.3.2
-                "IU-223.8214.52", // 2022.3.1
-                "IU-223.7571.182", // 2022.3
-                "IU-222.4459.24", // 2022.2.4
-                "IU-222.4345.14", // 2022.2.3
-
-                // IC - IntelliJ IDEA Community Edition
-                "IC-223.8617.56", // 2022.3.2
-                "IC-223.8214.52", // 2022.3.1
-                "IC-223.7571.182", // 2022.3
-                "IC-222.4459.24", // 2022.2.4
-                "IC-222.4345.14", // 2022.2.3
-            )
-        )
-        failureLevel.set(
-            listOf(
-                org.jetbrains.intellij.tasks.RunPluginVerifierTask.FailureLevel.INVALID_PLUGIN
-            )
-        )
     }
 }

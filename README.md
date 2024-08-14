@@ -154,7 +154,7 @@ To get started please read the [Contribution Guidelines](./CONTRIBUTING.md).
 ./gradlew test
 
 # To run plugin verifier to check compability
-./gradlew runPluginVerifier
+./gradlew verifyPlugin
 ```
 
 ### Build
