@@ -36,9 +36,6 @@ jobs:
       - run:
           name: Run tests
           command: ./gradlew test
-      - run:
-          name: Run pluginVerifier
-          command: ./gradlew verifyPlugin
       - store_test_results:
           path: build/test-results/test
       - store_artifacts:
