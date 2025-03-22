@@ -28,7 +28,7 @@ commands:
 
 jobs:
   test:
-    resource_class: xlarge
+    resource_class: large
     executor: gradle
     steps:
       - checkout
@@ -38,7 +38,7 @@ jobs:
           command: ./gradlew test
       - run:
           name: Run pluginVerifier
-          command: ./gradlew verifyPlugin
+          command: JAVA_OPTIONS="-Xms2000m -Xmx8000m" ./gradlew verifyPlugin
       - store_test_results:
           path: build/test-results/test
       - store_artifacts:
