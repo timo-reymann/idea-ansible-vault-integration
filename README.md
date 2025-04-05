@@ -16,6 +16,12 @@ Ansible Vault Integration
 	makes working with ansible-vault a breeze!
 </p>
 
+> WARNING: this plugin is in maintenance mode. I don't use Ansible that much anymore, so I will not be able to
+> maintain it as much as I would like to. If you want to take over, please reach out to me.
+>
+> I will still keep it up to date with the latest IntelliJ IDEA versions, but I will not add any new features or fix
+> bugs unless they are critical.
+
 ## Features
 
 ### Vaulting secrets
@@ -28,9 +34,11 @@ Unvaulting is as easy as placing your cursor in the secret, hitting ``Alt+Enter`
 are done!
 
 ## Requirements
+
 - IDEA-based IDE compatible with the plugin
 
 ## Installation
+
 1. Press (Ctrl+Alt+S/⌘/) to open the IDE settings and select Plugins.
 2. Search for `MJML Support` in the Marketplace and click Install.
 
@@ -49,7 +57,7 @@ In case you are using a script to provide your vault secret, the plugin provides
 | IDEA_ANSIBLE_VAULT_CONTEXT_FILE              | Absolute path to the file the vault/unvault action was triggered in |
 | IDEA_ANSIBLE_VAULT_CONTEXT_DIRECTORY         | Name of the directory the action was triggered in, **NO** path      |
 | IDEA_ANSIBLE_VAULT_CONTEXT_PROJECT_BASE_PATH | Absolute path of the project the action was triggered in            |
-| IDEA_ANSIBLE_VAULT_CONTEXT_PROJECT_NAME      | Name of the project the action was triggered in                    |
+| IDEA_ANSIBLE_VAULT_CONTEXT_PROJECT_NAME      | Name of the project the action was triggered in                     |
 
 #### Examples
 
@@ -83,10 +91,12 @@ group-vars/
     prod/vars.yml
 ```
 
-For each maturity you have a different vault file following this pattern: `.${maturity}.secret`, you can use the following
+For each maturity you have a different vault file following this pattern: `.${maturity}.secret`, you can use the
+following
 configuration:
 
 Cli args:
+
 ```
 --vault-password-file .idea-get-vault-password.sh
 ```
@@ -130,9 +140,11 @@ esac
 ```
 
 ## Motivation
+
 Ansible is great, but the ansible-vault is a piece of junk to use for passwords to encrypt and decrypt.
 
 ## Contributing
+
 I love your input! I want to make contributing to this project as easy and transparent as possible, whether it's:
 
 - Reporting a bug
@@ -146,9 +158,11 @@ To get started please read the [Contribution Guidelines](./CONTRIBUTING.md).
 ## Development
 
 ### Requirements
+
 - [Java](https://openjdk.org/)
 
 ### Test
+
 ```shell
 # To run unit tests
 ./gradlew test
@@ -158,6 +172,7 @@ To get started please read the [Contribution Guidelines](./CONTRIBUTING.md).
 ```
 
 ### Build
+
 ```shell
 ./gradlew buildPlugin
 ```
